@@ -36,29 +36,31 @@ module.exports = {
 		let langObject = [];
 
 		let langHeader = request.headers['accept-language'];
-		let langs = langHeader.split(',');
+		if (langHeader) {
+			let langs = langHeader.split(',');
 
-		langs.forEach((val) => {
-			let lang = val.split(';')[0].split('-')[0];
-			let region = null;
-			if (val.split(';')[0].split('-').length > 1) region = val.split(';')[0].split('-')[1];
+			langs.forEach((val) => {
+				let lang = val.split(';')[0].split('-')[0];
+				let region = null;
+				if (val.split(';')[0].split('-').length > 1) region = val.split(';')[0].split('-')[1];
 
-			let quality = 1;
-			if (val.split(';').length > 1) {
-				quality = parseFloat(val.split(';')[1].split('q=')[1]);
-			}
+				let quality = 1;
+				if (val.split(';').length > 1) {
+					quality = parseFloat(val.split(';')[1].split('q=')[1]);
+				}
 
-			let out = {
-				name: lang,
-				quality
-			};
+				let out = {
+					name: lang,
+					quality
+				};
 
-			if (region) out.region = region;
+				if (region) out.region = region;
 
-			langObject.push(out);
-		});
+				langObject.push(out);
+			});
 
-		object.lang = langObject;
+			object.lang = langObject;
+		}
 
 		return object;
 	}

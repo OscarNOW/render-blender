@@ -16,11 +16,11 @@ module.exports = {
                 return response.end(data);
             });
         else
-            if (checkAcceptHeader(request.headers.accept, 'text/html').isIn)
-                statusCode(response, 404);
-            else {
+            if (request.headers.accept && !checkAcceptHeader(request.headers.accept, 'text/html').isIn) {
                 response.writeHead(404);
                 return response.end();
             }
+            else
+                statusCode(response, 404);
     }
 };

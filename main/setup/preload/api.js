@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { readdirSync, existsSync, lstatSync } = fs;
+const { readdirSync, existsSync, statSync } = fs;
 const isModuleInstalled = require('../../functions/isModuleInstalled').execute;
 const parseErrorRaw = require('../../functions/error/parseErrorRaw').execute;
 const evalErrors = require('../../functions/error/evalErrors').execute;
@@ -20,21 +20,21 @@ readdirSync(generic.path.files.modules).forEach(moduleName => {
 function addApiCalls(websitePath, path) {
     if (existsSync(path)) {
         readdirSync(path).forEach((apiName) => {
-            if (lstatSync(`${path}${apiName}/`).isDirectory()) {
+            if (statSync(`${path}${apiName}`).isDirectory())
                 addApiCalls(`${websitePath}${apiName}/`, `${path}${apiName}/`);
-            } else {
+            else {
                 let req = require(`../../../${path}${apiName}`);
                 apiName = apiName.split('.js')[0];
                 let dependenciesInstalled = true;
                 let dependenciesNotInstalled = [];
-                if (req.dependencies && req.dependencies.modules) {
+                if (req.dependencies && req.dependencies.modules)
                     req.dependencies.modules.forEach((val) => {
                         if (!existsSync(`${generic.path.files.modules}${val}/`)) {
                             dependenciesInstalled = false;
                             dependenciesNotInstalled.push(val);
                         }
                     });
-                }
+
                 api[`${websitePath}${apiName}`] = {
                     file: require(`../../../${path}${apiName}`),
                     enabled: {
@@ -46,11 +46,10 @@ function addApiCalls(websitePath, path) {
                 };
                 if (!dependenciesInstalled) {
                     if (isModuleInstalled('text')) {
-                        let list = require(`${generic.path.files.modules}text/createList.js`).createList(dependenciesNotInstalled);
+                        let list = require(`../../../${generic.path.files.modules}text/createList.js`).createList(dependenciesNotInstalled);
                         parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', `${websitePath}${apiName}`)), messages.error.modulesNotInstalledFor.replace('{api}', `${websitePath}${apiName}`).replace('{dependencie}', list));
-                    } else {
+                    } else
                         parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', `${websitePath}${apiName}`)), messages.error.moduleNotInstalledFor.replace('{api}', `${websitePath}${apiName}`).replace('{dependencie}', dependenciesNotInstalled[0]));
-                    }
                     evalErrors();
                 }
             }

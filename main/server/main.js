@@ -7,6 +7,11 @@ module.exports = {
 
         try {
 
+            // if (request.url.toLowerCase() == '/errors') {
+            //     let t = [];
+            //     require('fs').readdirSync('./logs/errors/').forEach(v => t.push(require('fs').readFileSync('./logs/errors/' + v).toString()))
+            //     return response.end(JSON.stringify(t))
+            // } else
             if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
                 return require('../server/api.js').execute(request, response);
             else

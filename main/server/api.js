@@ -3,7 +3,7 @@ const settings = require('../../settings.json');
 
 const isModuleInstalled = require('../functions/isModuleInstalled.js').execute;
 const statusCode = require('../functions/error/statusCode.js').execute;
-const parseErrorOnline = require('../functions/error/parseErrorOnline.js');
+const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 
 module.exports = {
     execute(request, response) {
@@ -23,7 +23,7 @@ module.exports = {
                 } catch {
                     exists = false;
                 }
-                //if (!exists) errorCode(response, 500, { text: messages.error.executeFunctionNotFound })
+
                 if (!exists) return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
 
                 if (request.method == 'POST') {

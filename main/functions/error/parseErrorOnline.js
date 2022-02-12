@@ -19,9 +19,11 @@ module.exports = {
 
             evalErrors();
             file = file.split('.txt')[0];
-            return statusCode(response, 500, { errorFile: file, text: customText });
+            if (response)
+                return statusCode(response, 500, { errorFile: file, text: customText });
         } catch (err) {
-            statusCode(response, 500)
+            if (response)
+                statusCode(response, 500)
             require('./lastFallback').execute(err);
         }
     }

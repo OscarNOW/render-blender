@@ -15,7 +15,7 @@ if (require('../../functions/isModuleInstalled').execute('console')) {
 module.exports = {
     execute() {
         cConsole.clear();
-        //try {
+
         readdir(settings.generic.path.files.errors, (err, fi) => {
             try {
                 if (err) throw err;
@@ -27,6 +27,7 @@ module.exports = {
                 })
 
                 if (files[0]) {
+                    cConsole.clear();
                     let message = messages.error.thereAreErrors.replace('{amount}', files.length);
                     if (files.length == 1) message = messages.error.thereIsError.replace('{amount}', files.length);
 
@@ -48,12 +49,12 @@ module.exports = {
                         diagram.forEach((val) => {
                             cConsole.warn(val);
                         });
-                    } else {
+                    } else
                         files.forEach((val) => {
                             let occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
                             cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
                         });
-                    }
+
                     cConsole.log();
                     cConsole.warn(message);
                 }
@@ -61,9 +62,5 @@ module.exports = {
                 require('./lastFallback').execute(err);
             }
         });
-        //} catch (err) {
-        //    debugger;
-        //    console.warn(err);
-        //}
     }
 }
