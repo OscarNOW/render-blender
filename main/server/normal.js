@@ -6,7 +6,7 @@ const checkAcceptHeader = require('../functions/parse/header/accept');
 module.exports = {
     execute(request, response) {
 
-        let path = require('../functions/parse/normal').execute(request.url.toLowerCase());
+        let path = require('../functions/parse/normal').execute(request.url);
 
         if (fs.existsSync(path))
             fs.readFile(path, async (err, data) => {
