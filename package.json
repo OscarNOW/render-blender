@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Een template voor een website",
   "main": "index.js",
-  "scripts": {
-    "test": "node ."
-  },
+  "scripts": {},
   "author": "Oscar",
   "license": "ISC",
   "dependencies": {
