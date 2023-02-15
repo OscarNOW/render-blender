@@ -1,0 +1,11 @@
+node_modules/
+credentials/
+
+# Dotfiles
+.vscode/
+.github/
+.gitignore
+.eslintrc.*
+.editorconfig
+*.Dockerfile
+.gitpod.yml

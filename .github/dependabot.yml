@@ -1,0 +1,22 @@
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+      time: "04:00"
+      timezone: Europe/Amsterdam
+    versioning-strategy: increase
+    assignees:
+      - OscarNOW
+    commit-message:
+      prefix: "[DEP]"
+      prefix-development: "[DEP_DEV] "
+      include: scope
+    labels:
+      - dependencies
+    open-pull-requests-limit: 10
+    pull-request-branch-name:
+      separator: "-"

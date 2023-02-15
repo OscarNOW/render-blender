@@ -1,0 +1,36 @@
+{
+    "env": {
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "indent": [
+            "warn",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "no-undef": "error",
+        "no-const-assign": "error",
+        "no-this-before-super": "error",
+        "constructor-super": "error",
+        "no-eval": "error",
+        "no-var": "warn",
+        "no-unused-vars": "warn",
+        "no-unreachable": "warn",
+        "eqeqeq": "warn"
+    },
+    "globals": {
+        "WeakMap": true,
+        "Promise": true,
+        "BigInt": true,
+        "Symbol": true,
+        "Set": true,
+        "WeakSet": true,
+        "Proxy": true,
+        "Reflect": true
+    }
+}
