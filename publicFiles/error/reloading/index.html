@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reloading</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body onload="onload()">
+    <div id="outer">
+        <div>
+            <div class="textWrapper">
+                <center>
+                    <p id="reloadText">|reloadText|</p>
+                </center>
+            </div>
+            <div id="bar">
+                <div id="gBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const waitF = ms => new Promise(res => setTimeout(res, ms));
+
+        async function onload() {
+            let reloadText = document.getElementById('reloadText');
+            if (reloadText.innerText == '' || reloadText.innerText == '|reloadText|') {
+                reloadText.innerText = 'The server is currently having serious trouble.\nThe page automatically reloads if the loading bar is full.'
+            }
+
+            let bar = document.getElementById('bar');
+
+            await waitF(100);
+
+            bar.style.transition = 'margin-top 0.5s ease';
+
+            await waitF(250);
+
+            bar.style.marginTop = '5vh';
+
+            await waitF(600);
+
+            await loadBar();
+        }
+
+        async function loadBar() {
+            let oBar = document.getElementById('bar')
+            let bar = document.getElementById("gBar");
+
+            let randomOffset = 10;
+
+            await countDown(0, 100 / 6, 6, 1000, ii => {
+                if (ii >= 100) {
+                    bar.style.width = `100%`;
+                    countDownDone();
+                } else {
+                    let oldWith = bar.style.width.split('%')[0];
+                    let currentWidth = ii + getRandom(randomOffset * -1, randomOffset);
+
+                    if (currentWidth > oldWith) {
+                        bar.style.width = `${currentWidth}%`
+                    }
+                }
+            })
+        }
+
+        async function countDownDone() {
+            await waitF(1500);
+
+            let outer = document.getElementById('outer');
+            outer.style.left = '-120vw'
+
+            await waitF(600);
+
+            location.reload();
+        }
+
+        async function countDown(start, add, repeat, wait, callback) {
+            let ii = start;
+            for (let iii = 0; iii < repeat; iii++) {
+                callback(ii);
+                ii += add;
+                await waitF(wait);
+            }
+            callback(ii);
+        }
+
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+    </script>
+
+    <style>
+        .textWrapper {
+            width: 100%;
+            height: fit-content;
+
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .textWrapper p {
+            font-family: 'Roboto';
+            font-size: 2vmax;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        #bar {
+            width: 75vw;
+            height: 12vh;
+
+            background-color: rgb(248, 248, 248);
+            border: 1px solid rgb(161, 161, 161);
+
+            display: flex;
+            justify-content: flex-start;
+
+            border-radius: 25px;
+            overflow: hidden;
+
+            margin-top: 150vh;
+        }
+
+        #bar>div {
+            height: 12vh;
+            width: 0;
+
+            background-color: rgb(0, 0, 0);
+            transition: width 1.2s ease;
+        }
+
+        #outer {
+            width: 100vw;
+            height: 100vh;
+
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            display: flex;
+            justify-content: space-around;
+
+            transition: 0.5s left ease;
+        }
+
+        #outer>div {
+            height: 100vh;
+            width: fit-content;
+
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+    </style>
+</body>
+
+</html>

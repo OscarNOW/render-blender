@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reset password</title>
+  <meta name="description" content="Send an email to reset your password" />
+
+  <script type="module" src="/sdk/language.js"></script>
+
+  <script type="module" src="/resetPassword/index.js"></script>
+  <!-- inlineCss: /publicFiles/resetPassword/index.css -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+</head>
+
+
+<div class="container" id="container">
+  <form action="#">
+    <h1 data-lang_text="ResetPassword">Reset password</h1>
+
+    <input type="email" data-lang_placeholder=Email placeholder="Email" id="emailInput" />
+    <button type="button" id="sendResetEmailButton" class="disabled" data-lang_text="SendEmail">Send email!</button> <a
+      href="/login" id=loginBackButton class="loginbackButton" data-lang_text="BackToLogin">Back to login</a>
+
+  </form>
+
+
+</div>
+</div>
+</body>
+
+</html>

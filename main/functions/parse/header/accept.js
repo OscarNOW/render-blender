@@ -1,15 +1,15 @@
 module.exports = (acceptHeader, check) => {
-    if (typeof acceptHeader != 'string')
+    if (typeof acceptHeader !== 'string')
         throw new Error(`Typeof acceptHeader (${acceptHeader}) is not string`)
 
-    let arr = acceptHeader.split(',');
-    let newArr = [];
+    const arr = acceptHeader.split(',');
+    const newArr = [];
     let isAll = false;
     let allQal = 1;
 
-    arr.forEach(val => {
+    arr.forEach((val) => {
         if (isAll) return;
-        if (val.split(';')[0] == '*/*') {
+        if (val.split(';')[0] === '*/*') {
             isAll = true;
             if (val.split(';').length > 1)
                 allQal = val.split(';')[1].split('q=')[1];
@@ -30,10 +30,10 @@ module.exports = (acceptHeader, check) => {
     let found = false;
     let quality;
 
-    newArr.forEach(val => {
+    newArr.forEach((val) => {
         if (found) return;
 
-        if (val.type == check) {
+        if (val.type === check) {
             found = true;
             quality = val.quality
         }

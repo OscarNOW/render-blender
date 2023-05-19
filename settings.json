@@ -1,4 +1,17 @@
 {
+    "cache": {
+        "publicFiles": {
+            "cacheMinutes": 30,
+            "staleUseMinutes": 180,
+            "errorUseMinutes": 60
+        },
+        "privateFiles": {
+            "cacheMinutes": 30,
+            "staleUseMinutes": 180,
+            "errorUseMinutes": 60
+        },
+        "remoteConfig": 15
+    },
     "generic": {
         "websiteUrl": "localhost",
         "port": "80",
@@ -8,19 +21,159 @@
         ],
         "path": {
             "files": {
-                "messages": "./messages/",
                 "api": "./api/",
                 "errors": "./logs/errors/",
-                "files": "./files",
+                "files": "./publicFiles",
                 "errorFile": "{files}/error/general/index.html",
                 "reloadingFile": "{files}/error/reloading/index.html",
                 "modules": "./modules/",
                 "moduleApi": "{modules}{name}/api/",
                 "noError": ".noError",
                 "extraDependencies": "extraDependencies.json"
+            }
+        }
+    },
+    "minimalScores": {
+        "login": 0.7,
+        "signup": 0.8,
+        "postFlagged": 0.5,
+        "postHidden": 0.8
+    },
+    "permissions": {
+        "roles": {
+            "empty": {
+                "privateFiles": "never",
+                "database": {
+                    "get": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "delete": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "modify": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "create": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    }
+                },
+                "dashboard": {
+                    "getUserFrom": {
+                        "email": "never",
+                        "phoneNumber": "never"
+                    },
+                    "get": {
+                        "userInfo": {
+                            "_other": "never",
+                            "id": "never",
+                            "loginMethod": "never",
+                            "picture": "never",
+                            "displayName": "never",
+                            "email": "never",
+                            "emailVerified": "never",
+                            "phoneNumber": "never",
+                            "creationTime": "never",
+                            "lastSignInTime": "never",
+                            "2fa": "never"
+                        }
+                    },
+                    "modify": {
+                        "userInfo": {
+                            "_other": "never",
+                            "email": "never",
+                            "emailVerified": "never",
+                            "phoneNumber": "never",
+                            "password": "never",
+                            "displayName": "never",
+                            "picture": "never"
+                        }
+                    },
+                    "remove": {
+                        "2fa": "never"
+                    }
+                },
+                "moderate": {
+                    "getPost": "never",
+                    "updatePostVisibility": {
+                        "verified": "never",
+                        "flagged": "never",
+                        "hidden": "never"
+                    }
+                },
+                "user": {
+                    "delete": "never"
+                }
             },
-            "online": {
-                "api": "/api/"
+            "default": {
+                "database": {
+                    "get": "always"
+                },
+                "user": {
+                    "delete": "owner appCheck explicitAuth"
+                }
+            },
+            "authenticated": {
+                "database": {
+                    "get": "always",
+                    "delete": "owner appCheck explicitAuth",
+                    "modify": "owner appCheck explicitAuth",
+                    "create": "appCheck explicitAuth"
+                },
+                "user": {
+                    "delete": "owner appCheck explicitAuth"
+                }
+            }
+        },
+        "customRoles": {
+            "moderator": {
+                "privateFiles": {
+                    "moderate": "always"
+                },
+                "moderate": {
+                    "getPost": "appCheck explicitAuth",
+                    "updatePostVisibility": {
+                        "verified": "appCheck explicitAuth",
+                        "flagged": "appCheck explicitAuth",
+                        "hidden": "appCheck explicitAuth"
+                    }
+                }
+            },
+            "support": {
+                "privateFiles": {
+                    "dashboard": "always"
+                },
+                "dashboard": {
+                    "getUserFrom": "appCheck explicitAuth",
+                    "get": {
+                        "userInfo": "appCheck explicitAuth"
+                    },
+                    "modify": {
+                        "userInfo": {
+                            "_other": "never",
+                            "emailVerified": "never",
+                            "email": "appCheck explicitAuth",
+                            "phoneNumber": "appCheck explicitAuth",
+                            "password": "never",
+                            "displayName": "appCheck explicitAuth",
+                            "picture": "appCheck explicitAuth"
+                        }
+                    },
+                    "remove": {
+                        "2fa": "appCheck explicitAuth"
+                    }
+                }
+            },
+            "admin": {
+                "privateFiles": "always",
+                "_other": "appCheck explicitAuth"
             }
         }
     }

@@ -1,71 +1,98 @@
-const settings = require('../../../settings.json');
-const isModuleInstalled = require('../isModuleInstalled').execute;
-const fs = require('fs');
-
-let requestInfo;
-if (isModuleInstalled('requestInfo')) {
-    requestInfo = require(`../../../${settings.generic.path.files.modules}requestInfo/getInfo`).execute;
-}
+const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
+const parseCookie = require('../parse/cookie.js');
+const getConfig = require('../../../modules/remoteConfig/functions/getConfig.js');
 
 module.exports = {
-    execute(argument) {
-        let files = argument?.files;
-        let request = argument?.request;
+    async execute({ request } = {}) {
+        const languages = await getLanguages(request);
+        let messages = {};
 
-        let options = [];
-        if (!files)
-            files = fs.readdirSync(settings.generic.path.files.messages);
+        for (const lang of languages) {
+            const langMessages = await getLangMessages(lang);
+            messages = combineMessages(messages, langMessages);
+        };
 
-        files.forEach(val => {
-            options.push(val.split('.json')[0]);
-        })
-
-        if (options.length < 1) {
-            return null;
+        return {
+            languages,
+            messages
         }
-
-        let userOptions = [];
-        if (request && requestInfo)
-            userOptions = requestInfo(request).lang || [];
-        else
-            if (request && request.headers['accept-language'])
-                userOptions = [
-                    {
-                        name:
-                            request.headers['accept-language']
-                                .split(',')
-                                .split(';')[0]
-                                .split('-')[0],
-                        quality: 1
-                    }
-                ]
-
-        let lang;
-        let found = false;
-
-        if (request)
-            userOptions.forEach(val => {
-                if (found) return;
-                if (options.includes(val.name)) {
-                    lang = val.name;
-                    found = true;
-                }
-            });
-
-        settings.generic.lang.forEach(val => {
-            if (found) return;
-            if (options.includes(val)) {
-                lang = val;
-                found = true;
-            }
-        })
-
-        if (!found) {
-            lang = options[0];
-            found = true;
-        }
-
-        return { lang, file: `${lang}.json`, mainPath: settings.generic.path.files.messages, mainFunction: () => { return JSON.parse(fs.readFileSync(`${settings.generic.path.files.messages}${lang}.json`)) } }
 
     }
+}
+
+//todo: add to shared folder so that Client uses same function
+function combineMessages(oldMessages, newMessages) {
+    const messages = Object.assign({}, oldMessages);
+
+    for (const [key, newValue] of Object.entries(newMessages))
+        if (messages[key] === undefined)
+            messages[key] = newValue;
+        else if (typeof newValue === 'object')
+            messages[key] = combineMessages(messages[key], newValue);
+        else
+            messages[key] = newValue;
+
+    return messages;
+}
+
+async function getLanguages(request) {
+    if (!request) return await getSupportedLanguages();
+
+    let languages = [];
+
+    if (request.headers.cookie && parseCookie(request.headers.cookie).language)
+        languages.push(parseCookie(request.headers.cookie).language);
+
+    languages.push(
+        ...(requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
+    );
+
+    languages.push(...await getSupportedLanguages());
+
+    for (const lang of languages)
+        if (!(await getSupportedLanguages()).includes(lang))
+            languages = languages.filter((l) => l !== lang);
+
+    languages = [...new Set(languages)].reverse();
+
+    return languages;
+}
+
+const messageCache = {};
+async function getLangMessages(lang) {
+    if (messageCache[lang])
+        return messageCache[lang];
+
+    const config = await getConfig(`messages_${lang}`);
+    const messages = {};
+
+    for (const [key, value] of Object.entries(config)) {
+        let current = messages;
+
+        for (let keyPartIndex in key.split('_')) {
+            keyPartIndex = parseInt(keyPartIndex);
+            const keyPart = key.split('_')[keyPartIndex];
+
+            if (!current[keyPart])
+                current[keyPart] = keyPartIndex === key.split('_').length - 1 ? value : {};
+
+            current = current[keyPart];
+
+        }
+    }
+
+    if (messages.pages)
+        for (const [key, value] of Object.entries(messages.pages)) {
+            delete messages.pages[key];
+            messages.pages[key.replaceAll('1', '/')] = value;
+        }
+
+    messageCache[lang] = messages;
+
+    return messages;
+}
+
+async function getSupportedLanguages() {
+    const config = await getConfig();
+    return config.languages;
 }

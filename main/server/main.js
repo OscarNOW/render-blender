@@ -1,24 +1,103 @@
-const settings = require('../../settings.json')
-const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
+const fs = require('fs');
+const path = require('path');
+
+const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
+    fs.readdirSync(path.resolve(__dirname, './middleware/')).map((a) => ({ ...require(`./middleware/${a}`), name: a.split('.')[0] })) :
+    [];
+
+const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
+const parsePostBody = require('../functions/parse/postBody.js');
+
+const dbApi = require('./dbApi.js');
+const api = require('./api.js');
+const normal = require('./normal.js');
 
 module.exports = {
-    execute(request, response) {
-        const parseError = (error, customText) => parseErrorOnline(error, response, customText);
+    async execute(request, response) {
+        const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
         try {
+            let body;
+            if (request.method === 'POST')
+                body = parsePostBody(await waitPost(request));
 
-            // if (request.url.toLowerCase() == '/errors') {
-            //     let t = [];
-            //     require('fs').readdirSync('./logs/errors/').forEach(v => t.push(require('fs').readFileSync('./logs/errors/' + v).toString()))
-            //     return response.end(JSON.stringify(t))
-            // } else
-            if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
-                return require('../server/api.js').execute(request, response);
-            else
-                return require('./normal.js').execute(request, response);
+            const extraData = { body };
+
+            let responded = false;
+            let cachedMiddlewareData = {};
+            const executedMiddlewares = [];
+
+            async function executeMiddleware(name) {
+                if (executedMiddlewares.includes(name)) return true;
+                const middleware = middlewares.find((a) => a.name === name);
+
+                for (const name of middleware.info?.requires ?? [])
+                    if (!await executeMiddleware(name)) return false;
+
+                const newMiddlewareData = await middleware.execute({
+                    request,
+                    extraData,
+                    parseError: async (...arg) => {
+                        if (!responded) {
+                            responded = true;
+                            await parseError(...arg);
+                        }
+                    },
+                    middlewareData: cachedMiddlewareData
+                });
+
+                executedMiddlewares.push(name);
+                if (!newMiddlewareData) return false;
+
+                cachedMiddlewareData = { ...cachedMiddlewareData, ...newMiddlewareData };
+
+                return !responded;
+            };
+
+            for (const { name, info } of middlewares)
+                if (info?.requireRun)
+                    if (!await executeMiddleware(name)) return;
+
+            const middlewareData = {};
+            for (const { info, name } of middlewares)
+                for (const exportName of info?.exports ?? [])
+                    Object.defineProperty(middlewareData, exportName, {
+                        configurable: false,
+                        enumerable: true,
+                        get: async () => {
+                            if (!await executeMiddleware(name)) return;
+                            return cachedMiddlewareData[exportName];
+                        }
+                    });
+
+            if (!responded)
+                if (request.url.startsWith('/dbApi/'))
+                    return dbApi.execute(request, response, { middlewareData, extraData });
+                else if (request.url.startsWith('/api/'))
+                    return await api.execute(request, response, { middlewareData, extraData });
+                else
+                    return normal.execute(request, response, { middlewareData, extraData });
 
         } catch (err) {
-            parseError(err);
+            await parseError(err);
         }
     }
+}
+
+function waitPost(request) {
+    return new Promise((res) => {
+
+        let body = '';
+        request.on('data', (data) => {
+            body += data;
+
+            if (body.length > 1e6)
+                request.connection.destroy();
+        });
+
+        request.on('end', () => {
+            res(body);
+        });
+
+    });
 }

@@ -1,66 +1,55 @@
-const readdir = require('fs').readdir
-const settings = require('../../../settings.json');
-const messages = require('../get/messages').execute().mainFunction();
-const isModuleInstalled = require('../isModuleInstalled').execute;
+const readdir = require('util').promisify(require('fs').readdir);
 
-let cConsole = console;
-if (require('../../functions/isModuleInstalled').execute('console')) {
-    cConsole = {
-        clear: require(`../../.${settings.generic.path.files.modules}console/functions/clear`).execute,
-        log: require(`../../.${settings.generic.path.files.modules}console/functions/log`).execute,
-        warn: require(`../../.${settings.generic.path.files.modules}console/functions/warn`).execute
-    }
+const settings = require('../../../settings.json');
+let messages;
+
+let cConsole;
+try {
+    cConsole = require('../../../modules/console/functions/get.js');
+} catch {
+    cConsole = console;
 }
 
 module.exports = {
-    execute() {
-        cConsole.clear();
-
-        readdir(settings.generic.path.files.errors, (err, fi) => {
+    async execute() {
+        if (!messages)
             try {
-                if (err) throw err;
+                messages = (await require('../get/messages.js').execute()).messages
+            } catch { }
 
-                let files = [];
-                fi.forEach(val => {
-                    if (val == settings.generic.path.files.noError) return;
-                    files.push(val);
-                })
+        cConsole.clear();
+        cConsole.log(`${messages?.general?.ListeningOnPort || 'unable to get message'} ${settings.generic.port}`);
 
-                if (files[0]) {
-                    cConsole.clear();
-                    let message = messages.error.thereAreErrors.replace('{amount}', files.length);
-                    if (files.length == 1) message = messages.error.thereIsError.replace('{amount}', files.length);
+        try {
+            const files =
+                (await readdir(settings.generic.path.files.errors))
+                    .filter((val) => val !== settings.generic.path.files.noError);
 
-                    cConsole.warn(message);
-                    cConsole.log();
-                    if (isModuleInstalled('text')) {
-                        let rows = [];
-                        files.forEach((val) => {
-                            if (val.endsWith('.json')) {
-                                let occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
-                                rows.push([`${settings.generic.path.files.errors}${val}`, occurrences]);
-                            } else
-                                rows.push([`${settings.generic.path.files.errors}${val}`, -1])
-                        });
+            if (files[0]) {
+                cConsole.clear();
+                cConsole.log(`${messages?.general?.ListeningOnPort || 'unable to get message'} ${settings.generic.port}`);
+                cConsole.log();
+                cConsole.log();
 
-                        let createDiagram = require(`../../../${settings.generic.path.files.modules}text/createDiagram.js`);
-                        let diagram = createDiagram.twoColumns(rows, 4, ' ');
+                let message = messages?.error?.thereAreErrors?.replace?.('{amount}', files.length);
+                if (files.length === 1) message = messages?.error?.thereIsError?.replace?.('{amount}', files.length);
+                if (!message) message = 'unable to get message'
 
-                        diagram.forEach((val) => {
-                            cConsole.warn(val);
-                        });
-                    } else
-                        files.forEach((val) => {
-                            let occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
-                            cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
-                        });
+                cConsole.warn(message);
+                files.forEach((val) => {
+                    let occurrences;
+                    try {
+                        occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
+                    } catch {
+                        occurrences = -1;
+                    }
+                    cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
+                });
 
-                    cConsole.log();
-                    cConsole.warn(message);
-                }
-            } catch (err) {
-                require('./lastFallback').execute(err);
+                cConsole.log();
             }
-        });
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error });
+        }
     }
 }

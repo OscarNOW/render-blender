@@ -1,21 +1,14 @@
 const http = require('http');
-const settings = require('./settings.json');
+const { generic: { port } } = require('./settings.json');
 
-let server;
-
-server = http.createServer(                         				//Create server
-	require('./main/functions/error/lastFallback').serverExecute	//Error handler
-);
+const server = http.createServer(require('./main/functions/error/lastFallback.js').serverExecute);
 
 try {
-
-	//Evaluate errors
-	require('./main/functions/error/evalErrors').execute();
-
+    require('./main/functions/error/evalErrors').execute();
 } catch (e) { }
 
+try {
+    require('./modules/perspective/functions/start.js')();
+} catch (e) { }
 
-server.listen(						//Listen to server
-	process.env.PORT ||				//If hosted on heroku
-	settings.generic.port			//Else
-);
+server.listen(port);

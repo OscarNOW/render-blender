@@ -1,82 +1,86 @@
-const api = require('../setup/preload/api.js').execute();
-const settings = require('../../settings.json');
+const apiPromise = require('../setup/preload/api.js').execute();
 
 const isModuleInstalled = require('../functions/isModuleInstalled.js').execute;
-const statusCode = require('../functions/error/statusCode.js').execute;
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 
+const statusCode = (response, code, { text, short }) => {
+    response.writeHead(code, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify({
+        successful: `${code}`.startsWith('2'),
+        code,
+        text,
+        short
+    }));
+}
+
 module.exports = {
-    execute(request, response) {
-        let messages = require('../functions/get/messages').execute({ request }).mainFunction();
+    async execute(request, response, { middlewareData, extraData }) {
+        const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
-        let parseError = (error, customText) => parseErrorOnline(error, response, customText);
+        try {
+            const messages = (await require('../functions/get/messages.js').execute({ request })).messages;
+            const { path, params, success } = require('../functions/parse/apiCall.js').execute(request);
 
-        let { path, params } = require('../functions/parse/apiCall.js').execute(request.url);
+            if (!success) {
+                statusCode(response, 400, { text: 'Invalid request', short: 'invalidRequest' });
+                return;
+            }
 
-        if (api[path]) {
-            if (api[path].enabled.dependencies.installed) {
-                let ex = api[path].file;
+            const api = await apiPromise;
+            if (api[path])
+                if (api[path].enabled.dependencies.installed) {
+                    const file = api[path].file;
+                    const executeFunctionExists = Boolean(file?.execute);
 
-                let exists = true;
-                try {
-                    if (!ex.execute) exists = false;
-                } catch {
-                    exists = false;
-                }
+                    if (!executeFunctionExists)
+                        return await parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
 
-                if (!exists) return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
+                    let cacheHeaders = {};
+                    if (!file.info?.cache?.enabled)
+                        cacheHeaders = { 'Cache-Control': 'private, max-age=0, no-cache, no-store, must-revalidate' };
+                    else
+                        cacheHeaders = {
+                            'Cache-Control': `${file.info.cache.private ? 'private' : 'public'}, max-age=${file.info.cache.minutes * 60}, stale-while-revalidate=${file.info.cache.staleUseMinutes * 60}, stale-if-error=${file.info.cache.errorUseMinutes * 60}`,
+                            'Vary': (file.info.cache.vary || []).join(', ')
+                        }
 
-                if (request.method == 'POST') {
-                    let body = '';
-                    request.on('data', function (data) {
-                        body += data;
-                    });
-                    request.on('end', async function () {
-                        let cont = {};
-                        body.split('&').forEach((val, index) => {
-                            let key = decodeURIComponent(val.split('=')[0].replace(/\+/g, ' '));
-                            let value = decodeURIComponent(val.split('=')[1].replace(/\+/g, ' '));
-                            cont[key] = decodeURIComponent(value);
-                        });
-                        params = cont;
-                        ex.execute({
-                            statusCode: (code, text) => {
-                                statusCode(response, code, { text: text });
+                    if (request.method === 'GET')
+                        file.execute({
+                            statusCode: (code, short, text) => {
+                                statusCode(response, code, { text, short });
                             },
                             parseError,
                             end: (data) => {
+                                let type;
+                                if (typeof data === 'string')
+                                    type = 'text/plain';
+                                else if (typeof data === 'object')
+                                    type = 'application/json';
+
+                                response.writeHead(200, {
+                                    ...cacheHeaders,
+                                    'Content-Type': type,
+                                    'Content-Length': Buffer.byteLength(data)
+                                });
+
                                 response.end(data);
                             },
                             request,
                             isModuleInstalled,
                             params,
-                            response
+                            response,
+                            middlewareData,
+                            extraData
                         });
-                    });
-                } else {
-                    ex.execute({
-                        statusCode: (code, text) => {
-                            statusCode(response, code, { text: text });
-                        },
-                        parseError,
-                        end: (data) => {
-                            response.end(data);
-                        },
-                        request,
-                        isModuleInstalled,
-                        params,
-                        response
-                    });
-                }
-            } else
-                if (isModuleInstalled('text')) {
-                    let list = require(`../../${settings.generic.path.files.modules}text/createList.js`).createList(api[path].enabled.dependencies.dependenciesNotInstalled);
-                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.modulesNotInstalledFor.replace('{api}', path).replace('{dependencie}', list));
+                    else
+                        statusCode(response, 405, { text: 'Method not allowed', short: 'methodNotAllowed' });
                 } else
-                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependencie}', api[path].enabled.dependencies.dependenciesNotInstalled[0]));
-        } else
-            return statusCode(response, 404, { text: messages.error.apiCallNotFound });
+                    return await parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled.join(', ')));
+            else
+                return statusCode(response, 404, { text: messages.error.apiCallNotFound });
 
-        return;
+        } catch (err) {
+            await parseError(err);
+        }
     }
 }

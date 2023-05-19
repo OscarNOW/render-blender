@@ -1,9 +1,9 @@
-const parseErrorRaw = require('./parseErrorRaw').execute;
+const parseErrorRaw = require('./parseErrorRaw.js').execute;
 const evalErrors = require('./evalErrors').execute;
-const statusCode = require('./statusCode').execute;
+const statusCode = require('./statusCode.js').execute;
 
 module.exports = {
-    execute(error, response, customText) {
+    async execute({ error, request, response, text: customText }) {
         try {
             let errorMessage = error.stack;
             if (errorMessage === undefined) {
@@ -15,16 +15,15 @@ module.exports = {
                 }
             }
 
-            let file = parseErrorRaw(error, customText);
+            let file = await parseErrorRaw(error, customText);
+            if (file)
+                file = file.split('.')[0];
 
             evalErrors();
-            file = file.split('.txt')[0];
             if (response)
-                return statusCode(response, 500, { errorFile: file, text: customText });
-        } catch (err) {
-            if (response)
-                statusCode(response, 500)
-            require('./lastFallback').execute(err);
+                return await statusCode({ request, response, code: 500, errorFile: file, text: customText });
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error, request, response });
         }
     }
 }
