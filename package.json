@@ -9,7 +9,7 @@
     "author": "Oscar",
     "license": "ISC",
     "dependencies": {
-        "firebase-admin": "^11.8.0",
+        "firebase-admin": "^11.9.0",
         "google-auth-library": "^8.8.0",
         "googleapis": "^118.0.0",
         "mime-types": "^2.1.35",
