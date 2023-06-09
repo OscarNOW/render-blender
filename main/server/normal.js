@@ -81,15 +81,13 @@ function respond({ path, response, request, privateFile }) {
 
         const extraHeaders = getExtraHeaders(false);
 
-        return {
-            statusCode: 200,
-            headers: {
-                ...extraHeaders,
-                'Content-Type': contentType + '; charset=UTF-8',
-                'Content-Length': Buffer.byteLength(data)
-            },
-            data
-        };
+        response.writeHead(200, {
+            ...extraHeaders,
+            'Content-Type': contentType + '; charset=UTF-8',
+            'Content-Length': Buffer.byteLength(data)
+        });
+
+        response.end(data);
     } else {
         const size = fs.statSync(path).size;
         const readStream = fs.createReadStream(path);
