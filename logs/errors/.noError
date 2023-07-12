@@ -1,4 +1,0 @@
-This isn't an error and will not be parsed as one. The purpose for this file is so this folder can be stored on
-Github. The default name of this file is ".noError". To change the name of this file go to:
-
-../settings.json    .generic.path.files.noError
