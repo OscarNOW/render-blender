@@ -15,5 +15,3 @@ if not exist renderDone/ (
     mkdir renderDone
 )
 move render/%1 renderDone/%1
-
-exit
