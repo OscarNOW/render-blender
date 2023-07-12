@@ -5,7 +5,10 @@
     ],
     "messages": {
         "httpStatusCodes": {
-            "400": "HTTP 400"
+            "400": {
+                "400": "HTTP 400",
+                "404": "HTTP 404"
+            }
         },
         "error": {
             "reload": "Herladen"
