@@ -17,22 +17,23 @@ module.exports = {
         if (!filePath.startsWith(basePath)) return statusCode(403, 'invalidFilePath', 'Invalid file path');
         if (!fs.existsSync(filePath)) return statusCode(403, 'invalidFilePath', 'Invalid file path');
 
-        const id = `${Math.floor(Math.random() * 10000)}`;
+        const id = Math.floor(Math.random() * 10000);
+        const fileName = `${id}.blend`;
 
         const newBaseFilePath = path.join(__dirname, '../../worker/render/');
-        const newFilePath = path.join(newBaseFilePath, `${id}.blend`);
+        const newFilePath = path.join(newBaseFilePath, fileName);
 
         if (!newFilePath.startsWith(newBaseFilePath)) return statusCode(403, 'invalidFilePath', 'Invalid file path');
 
         fs.copyFileSync(filePath, newFilePath);
-        startWorker();
+        render(fileName);
 
-        end(id);
+        end(`${id}`);
     }
 }
 
-function startWorker() {
-    const process = spawn(`"${path.join(__dirname, '../../worker/spawn.bat')}"`, [], { shell: true, cwd: path.join(__dirname, '../../worker/') });
+function render(fileName) {
+    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [fileName], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
     process.stdout.on('data', (data) => {
         console.log(data.toString());
