@@ -2,8 +2,6 @@ const file = document.getElementById('file');
 const form = document.getElementById('form');
 const code = document.getElementById('code');
 
-file.addEventListener('change', form.submit());
-
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -24,4 +22,4 @@ form.addEventListener('submit', async (e) => {
 
     console.log('Done')
 
-})
+});
