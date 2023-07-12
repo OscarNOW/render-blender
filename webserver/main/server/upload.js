@@ -3,7 +3,7 @@ const path = require('path');
 
 const statusCode = require('../functions/error/statusCode.js').execute;
 
-if (!fs.existsSync('/secret.json')) throw new Error('No secret.json present');
+if (!fs.existsSync(path.join(__dirname, '../../secret.json'))) throw new Error('No secret.json present');
 const { code } = require('../../secret.json');
 
 function execute(request, response, { extraData: { body } }) {
