@@ -6,7 +6,6 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
     [];
 
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
-const parsePostBody = require('../functions/parse/postBody.js');
 
 const api = require('./api.js');
 const normal = require('./normal.js');
@@ -21,7 +20,7 @@ module.exports = {
         try {
             let body;
             if (request.method === 'POST')
-                body = parsePostBody(await waitPost(request));
+                body = await waitPost(request);
 
             const extraData = { body };
 
@@ -86,7 +85,6 @@ module.exports = {
     }
 }
 
-//todo-imp: test if works
 function waitPost(request) {
     return new Promise((res) => {
         const maxBytes = 500000000; //500mb
