@@ -10,9 +10,10 @@ form.addEventListener('submit', async (e) => {
     url.searchParams.set('code', code.value);
     url.searchParams.set('filePath', path.value);
 
-    await fetch(`/api/render?code=${code.value}&filePath=${path.value}`);
+    const resp = await fetch(`/api/render?code=${code.value}&filePath=${path.value}`);
+    const id = await resp.text();
 
-    alert('Done')
+    document.body.append(id);
 
     return;
 });
