@@ -3,5 +3,12 @@
         "nl",
         "en"
     ],
-    "messages": {}
+    "messages": {
+        "httpStatusCodes": {
+            "400": "HTTP 400"
+        },
+        "error": {
+            "reload": "Herladen"
+        }
+    }
 }
