@@ -24,7 +24,7 @@ module.exports = {
 
         let data = fs.readFileSync(path);
 
-        let newText = data.toString('utf-8').replace('|errorCode|', code).replace('|errorCodeMessage|', text).replace('|reloadText|', gMessages ? gMessages.error.reload : 'Reload');
+        let newText = data.toString('utf-8').replace('|errorCode|', code).replace('|errorCodeMessage|', text).replace('|reloadText|', gMessages?.error?.reload ?? 'Reload');
         data = Buffer.from(newText, 'utf-8');
 
         if (errorFile) {
