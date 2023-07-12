@@ -6,7 +6,6 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const url = new URL(form.action);
-    const formData = new FormData(form);
 
     url.searchParams.set('code', code.value);
     url.searchParams.set('fileName', file.files[0].name);
@@ -15,7 +14,7 @@ form.addEventListener('submit', async (e) => {
 
     const fetchOptions = {
         method: form.method,
-        body: formData
+        body: file.files[0]
     };
 
     await fetch(url, fetchOptions);
