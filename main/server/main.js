@@ -10,9 +10,12 @@ const parsePostBody = require('../functions/parse/postBody.js');
 
 const api = require('./api.js');
 const normal = require('./normal.js');
+const upload = require('./upload.js');
 
 module.exports = {
     async execute(request, response) {
+        console.log(request.url)
+
         const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
         try {
@@ -70,7 +73,9 @@ module.exports = {
                     });
 
             if (!responded)
-                if (request.url.startsWith('/api/'))
+                if (request.url.startsWith('/upload'))
+                    return await upload.execute(request, response, { middlewareData, extraData });
+                else if (request.url.startsWith('/api/'))
                     return await api.execute(request, response, { middlewareData, extraData });
                 else
                     return normal.execute(request, response, { middlewareData, extraData });
@@ -83,12 +88,13 @@ module.exports = {
 
 function waitPost(request) {
     return new Promise((res) => {
+        const maxBytes = 500000000; //500mb
 
-        let body = '';
+        let body = Buffer.alloc(0);
         request.on('data', (data) => {
-            body += data;
+            body = Buffer.concat([body, data]);
 
-            if (body.length > 1e6)
+            if (body.byteLength > maxBytes)
                 request.connection.destroy();
         });
 
