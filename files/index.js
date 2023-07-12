@@ -20,6 +20,7 @@ form.addEventListener('submit', async (e) => {
 
     await fetch(url, fetchOptions);
 
-    console.log('Done')
+    alert('Done');
 
+    return;
 });
