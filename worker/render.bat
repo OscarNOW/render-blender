@@ -1,5 +1,6 @@
 @echo off
 echo Rendering %1 at %2
+echo Blender at %3
 
 if not exist render\ (
     mkdir render\
@@ -14,7 +15,7 @@ if not exist output\%1\ (
     mkdir output\%1\
 )
 
-"%3 %4 %5 %6" -b %2 -F PNG -o %cd%\output\%1\####.png -a
+%3 -b %2 -F PNG -o %cd%\output\%1\####.png -a
 
 if not exist renderDone\ (
     mkdir renderDone

@@ -25,14 +25,14 @@ module.exports = {
 }
 
 function render(id, filePath) {
-    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [id, filePath, blenderPath], { shell: true, cwd: path.join(__dirname, '../../worker/') });
+    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [id, `"${filePath}"`, `"${blenderPath}"`], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
     process.stdout.on('data', (data) => {
         console.log(data.toString());
     });
 
     process.stderr.on('data', (data) => {
-        console.error(data.toString());
+        console.warn(data.toString());
     });
 
     process.on('exit', (code) => {
