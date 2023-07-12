@@ -9,6 +9,7 @@ if not exist output/%1 (
     mkdir output/%1
 )
 
+@REM todo: blender is not recognised as a program
 blender -b render/%1 -F PNG -o output/%1/####.png -a
 
 if not exist renderDone/ (
