@@ -13,7 +13,7 @@ form.addEventListener('submit', async (e) => {
     const resp = await fetch(`/api/render?code=${code.value}&filePath=${path.value}`);
     const id = await resp.text();
 
-    document.body.append(id);
+    window.location.href = `/track?id=${id}`;
 
     return;
 });
