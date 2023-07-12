@@ -86,6 +86,7 @@ module.exports = {
     }
 }
 
+//todo-imp: test if works
 function waitPost(request) {
     return new Promise((res) => {
         const maxBytes = 500000000; //500mb
