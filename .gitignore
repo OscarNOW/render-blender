@@ -3,3 +3,4 @@ credentials/
 .dccache
 logs/
 console.txt
+secret.json
