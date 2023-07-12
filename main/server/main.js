@@ -13,8 +13,6 @@ const upload = require('./upload.js');
 
 module.exports = {
     async execute(request, response) {
-        console.log(request.url)
-
         const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
         try {
