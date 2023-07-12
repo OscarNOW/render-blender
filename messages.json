@@ -4,6 +4,9 @@
         "en"
     ],
     "messages": {
+        "general": {
+            "ListeningOnPort": "Aan het luisteren op port"
+        },
         "httpStatusCodes": {
             "400": {
                 "400": "HTTP 400",
@@ -11,7 +14,8 @@
             }
         },
         "error": {
-            "reload": "Herladen"
+            "reload": "Herladen",
+            "thereIsError": "Er is een fout"
         }
     }
 }
