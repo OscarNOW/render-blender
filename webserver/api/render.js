@@ -18,22 +18,14 @@ module.exports = {
         if (!fs.existsSync(filePath)) return statusCode(403, 'invalidFilePath', 'Invalid file path');
 
         const id = Math.floor(Math.random() * 10000);
-        const fileName = `${id}.blend`;
 
-        const newBaseFilePath = path.join(__dirname, '../../worker/render/');
-        const newFilePath = path.join(newBaseFilePath, fileName);
-
-        if (!newFilePath.startsWith(newBaseFilePath)) return statusCode(403, 'invalidFilePath', 'Invalid file path');
-
-        fs.copyFileSync(filePath, newFilePath);
-        render(fileName);
-
+        render(id, filePath);
         end(`${id}`);
     }
 }
 
-function render(fileName) {
-    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [fileName, blenderPath], { shell: true, cwd: path.join(__dirname, '../../worker/') });
+function render(id, filePath) {
+    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [id, filePath, blenderPath], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
     process.stdout.on('data', (data) => {
         console.log(data.toString());
