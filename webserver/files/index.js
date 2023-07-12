@@ -1,4 +1,4 @@
-const file = document.getElementById('file');
+const path = document.getElementById('path');
 const form = document.getElementById('form');
 const code = document.getElementById('code');
 
@@ -8,17 +8,9 @@ form.addEventListener('submit', async (e) => {
     const url = new URL(form.action);
 
     url.searchParams.set('code', code.value);
-    url.searchParams.set('fileName', file.files[0].name);
+    url.searchParams.set('filePath', path.value);
 
-    console.log(url);
-
-    const fetchOptions = {
-        method: form.method,
-        body: file.files[0]
-    };
-
-    await fetch(url, fetchOptions);
-    await fetch(`/api/render?code=${code.value}&fileName=${file.files[0].name}`);
+    await fetch(`/api/render?code=${code.value}&filePath=${path.value}`);
 
     alert('Done')
 

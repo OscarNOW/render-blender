@@ -9,7 +9,6 @@ const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execu
 
 const api = require('./api.js');
 const normal = require('./normal.js');
-const upload = require('./upload.js');
 
 module.exports = {
     async execute(request, response) {
@@ -70,9 +69,7 @@ module.exports = {
                     });
 
             if (!responded)
-                if (request.url.startsWith('/upload'))
-                    return await upload.execute(request, response, { middlewareData, extraData });
-                else if (request.url.startsWith('/api/'))
+                if (request.url.startsWith('/api/'))
                     return await api.execute(request, response, { middlewareData, extraData });
                 else
                     return normal.execute(request, response, { middlewareData, extraData });
