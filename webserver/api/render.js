@@ -3,7 +3,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 const { code } = require('../secret.json');
-const { basePath } = require('../settings.json');
+const { basePath, blenderPath } = require('../settings.json');
 
 module.exports = {
     execute({ end, params, statusCode }) {
@@ -33,7 +33,7 @@ module.exports = {
 }
 
 function render(fileName) {
-    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [fileName], { shell: true, cwd: path.join(__dirname, '../../worker/') });
+    const process = spawn(`"${path.join(__dirname, '../../worker/launchRender.bat')}"`, [fileName, blenderPath], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
     process.stdout.on('data', (data) => {
         console.log(data.toString());
