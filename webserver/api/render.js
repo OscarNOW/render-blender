@@ -32,8 +32,7 @@ module.exports = {
 }
 
 function startWorker() {
-    console.log('Starting worker...')
-    const process = spawn(`"${path.join(__dirname, '../../worker/spawn.bat')}"`, [], { shell: true });
+    const process = spawn(`"${path.join(__dirname, '../../worker/spawn.bat')}"`, [], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
     process.stdout.on('data', (data) => {
         console.log(data.toString());
@@ -44,6 +43,7 @@ function startWorker() {
     });
 
     process.on('exit', (code) => {
-        console.log(`Child exited with code ${code}`);
+        if (code !== 0)
+            console.log(`Child exited with code ${code}`);
     });
 }
