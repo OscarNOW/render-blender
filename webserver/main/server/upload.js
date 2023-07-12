@@ -13,7 +13,7 @@ function execute(request, response, { extraData: { body } }) {
     if (!urlSearchParams.get('fileName')) return statusCode({ request, response, code: 403, text: 'No fileName provided' });
 
     if (!fs.existsSync('/user/')) fs.mkdirSync('/user/');
-    if (!fs.existsSync('/user/files/')) fs.mkdirSync('user/files/');
+    if (!fs.existsSync('/user/files/')) fs.mkdirSync('/user/files/');
 
     const baseFilePath = path.join(__dirname, '../../user/files/');
     const filePath = path.join(baseFilePath, urlSearchParams.get('fileName'));
@@ -21,6 +21,7 @@ function execute(request, response, { extraData: { body } }) {
     if (!filePath.startsWith(baseFilePath)) return statusCode({ request, response, code: 403, text: 'Invalid file path' });
 
     fs.writeFileSync(filePath, body);
+    console.log('Upload successful')
 }
 
 module.exports = { execute };

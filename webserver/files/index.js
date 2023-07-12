@@ -18,8 +18,9 @@ form.addEventListener('submit', async (e) => {
     };
 
     await fetch(url, fetchOptions);
+    await fetch(`/api/render?code=${code.value}&fileName=${file.files[0].name}`);
 
-    alert('Done');
+    alert('Done')
 
     return;
 });
