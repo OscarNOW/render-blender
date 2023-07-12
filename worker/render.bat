@@ -1,17 +1,17 @@
 @echo off
 echo Rendering %1
 
-if not exist output/ (
-    mkdir output
+if not exist output\ (
+    mkdir output\
 )
 
-if not exist output/%1 (
-    mkdir output/%1
+if not exist output\%1\ (
+    mkdir output\%1\
 )
 
-"%2 %3 %4 %5" -b render/%1 -F PNG -o output/%1/####.png -a
+"%2 %3 %4 %5" -b render\%1 -F PNG -o %cd%\output\%1\####.png -a
 
-if not exist renderDone/ (
+if not exist renderDone\ (
     mkdir renderDone
 )
-move render/%1 renderDone/%1
+move render\%1 renderDone\%1
