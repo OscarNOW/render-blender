@@ -6,7 +6,7 @@ const serverSideRenderHtml = require('../../functions/serverSideRenderHtml/serve
 const getExtraHeaders = require('../../functions/extraHeaders.js');
 const getExtraHtmlHeaders = require('../../functions/extraHtmlHeaders.js');
 
-const publicFiles = {};
+const files = {};
 
 //todo: move to separate file
 const textFiles = [
@@ -19,13 +19,11 @@ const textFiles = [
     'svg'
 ];
 
-addPublicFiles('/', './publicFiles/')
+addFiles('/', './files/')
 
-// console.log(require('util').inspect(publicFiles, { colors: true, depth: 2 }))
+module.exports = files;
 
-module.exports = publicFiles;
-
-function addPublicFiles(websitePath, path) {
+function addFiles(websitePath, path) {
     cConsole.log(`Preloading public files from ${path}`)
 
     if (fs.existsSync(path))
@@ -35,9 +33,9 @@ function addPublicFiles(websitePath, path) {
                 if (name !== 'index.html') pathname += name;
                 if (pathname.endsWith('/')) pathname = pathname.slice(0, -1);
 
-                publicFiles[pathname] = getPublicFile(path + name);
+                files[pathname] = getPublicFile(path + name);
             } else
-                addPublicFiles(websitePath + name + '/', path + name + '/');
+                addFiles(websitePath + name + '/', path + name + '/');
         }
 }
 

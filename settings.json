@@ -1,16 +1,10 @@
 {
     "cache": {
-        "publicFiles": {
+        "files": {
             "cacheMinutes": 30,
             "staleUseMinutes": 180,
             "errorUseMinutes": 60
-        },
-        "privateFiles": {
-            "cacheMinutes": 30,
-            "staleUseMinutes": 180,
-            "errorUseMinutes": 60
-        },
-        "remoteConfig": 15
+        }
     },
     "generic": {
         "websiteUrl": "localhost",
@@ -23,7 +17,7 @@
             "files": {
                 "api": "./api/",
                 "errors": "./logs/errors/",
-                "files": "./publicFiles",
+                "files": "./files",
                 "errorFile": "{files}/error/general/index.html",
                 "reloadingFile": "{files}/error/reloading/index.html",
                 "modules": "./modules/",

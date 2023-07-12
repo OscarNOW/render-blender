@@ -12,12 +12,10 @@ module.exports = {
             localPath = `${localPath}index.html`;
         };
 
-        const publicPath = pathLib.resolve(__dirname, `../../publicFiles${localPath}`);
-        const privatePath = pathLib.resolve(__dirname, `../../privateFiles${localPath}`);
+        const path = pathLib.resolve(__dirname, `../../files${localPath}`);
 
         return {
-            publicPath,
-            privatePath,
+            path,
             localPath
         };
     }

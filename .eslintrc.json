@@ -63,8 +63,6 @@
         "WeakSet": true,
         "Proxy": true,
         "Reflect": true,
-        "grecaptcha": true,
-        "google": true,
         "Uint8Array": true
     }
 }

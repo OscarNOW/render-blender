@@ -36,7 +36,7 @@ module.exports = (html, isPrivate) => {
 
         const cssPath = html.substring(inlineCssIndex + inlineCssStartString.length, endIndex);
         const parsedCssPath = path.resolve(`.${cssPath}`);
-        if (![path.resolve(__dirname, '../../../publicFiles/'), path.resolve(__dirname, '../../../privateFiles/')].some((p) => parsedCssPath.startsWith(p))) {
+        if (!parsedCssPath.startsWith(path.resolve(__dirname, '../../../files/'))) {
             inlineCssIndex = html.indexOf(inlineCssStartString, inlineCssIndex + 1);
             continue;
         }

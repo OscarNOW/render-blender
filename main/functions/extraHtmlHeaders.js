@@ -17,7 +17,7 @@ module.exports = ({ data }) => {
 
     }
 
-    // add all preloadPublicFiles to loadedFiles
+    // add all files to loadedFiles
     let changed = true;
     while (changed) {
         changed = false;
@@ -87,8 +87,8 @@ module.exports = ({ data }) => {
 }
 
 function getPublicFilePreloadInfo(path) {
-    const file = fs.existsSync(pathLib.resolve(__dirname, `../../publicFiles${path}`)) ?
-        fs.readFileSync(pathLib.resolve(__dirname, `../../publicFiles${path}`)).toString() :
+    const file = fs.existsSync(pathLib.resolve(__dirname, `../../files${path}`)) ?
+        fs.readFileSync(pathLib.resolve(__dirname, `../../files${path}`)).toString() :
         '';
 
     const fileRequirements = getFileRequirements(file);

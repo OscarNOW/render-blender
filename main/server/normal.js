@@ -6,7 +6,7 @@ const serverSideRenderHtml = require('../functions/serverSideRenderHtml/serverSi
 const getExtraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
 const getExtraHeaders = require('../functions/extraHeaders.js');
 
-const publicFiles = require('../setup/preload/publicFiles.js');
+const files = require('../setup/preload/files.js');
 
 //todo: move to separate file
 const textFiles = [
@@ -20,42 +20,34 @@ const textFiles = [
 ];
 
 module.exports = {
-    async execute(request, response, { middlewareData: { hasPermission } }) {
+    async execute(request, response) {
 
-        const { publicPath, privatePath, localPath } = require('../functions/urlToPath.js').execute(request.url);
-        const permissionParts = localPath.split('/').slice(1);
+        const { path } = require('../functions/urlToPath.js').execute(request.url);
 
-        let isPrivate = false;
-        if (fs.existsSync(privatePath)) {
-            hasPermission = await hasPermission;
-            isPrivate = hasPermission(['privateFiles', ...permissionParts]);
-        };
-        const isPublic = fs.existsSync(publicPath);
-
-        if ((!isPrivate) && (!isPublic))
+        if (!fs.existsSync(path))
             return await statusCode({ request, response, code: 404 });
 
         respond({
-            path: isPrivate ? privatePath : publicPath,
+            path,
             request,
-            response,
-            privateFile: isPrivate
+            response
         });
     }
 };
 
-function respond({ path, response, request, privateFile }) {
+function respond({ path, response, request }) {
     let pathname = request.url.split('?')[0];
     if (pathname.endsWith('/')) pathname = pathname.slice(0, -1);
 
-    if (!privateFile && publicFiles[pathname]) {
-        const { statusCode, headers, data, path } = publicFiles[pathname];
+    if (files[pathname]) {
+        const { statusCode, headers, data, path } = files[pathname];
         response.writeHead(statusCode, headers);
 
         if (data)
             response.end(data);
         else
             fs.createReadStream(path).pipe(response);
+
         return
     }
 
@@ -64,8 +56,8 @@ function respond({ path, response, request, privateFile }) {
     if (contentType === 'text/html') {
         const data = fs.readFileSync(path).toString()
 
-        const finalData = serverSideRenderHtml(data, privateFile);
-        const extraHeaders = getExtraHeaders(privateFile);
+        const finalData = serverSideRenderHtml(data);
+        const extraHeaders = getExtraHeaders();
         const extraHtmlHeaders = getExtraHtmlHeaders({ data });
 
         response.writeHead(200, {
@@ -92,7 +84,7 @@ function respond({ path, response, request, privateFile }) {
         const size = fs.statSync(path).size;
         const readStream = fs.createReadStream(path);
 
-        const extraHeaders = getExtraHeaders(privateFile);
+        const extraHeaders = getExtraHeaders();
 
         response.writeHead(200, {
             ...extraHeaders,

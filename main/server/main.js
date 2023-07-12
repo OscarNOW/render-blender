@@ -8,7 +8,6 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 const parsePostBody = require('../functions/parse/postBody.js');
 
-const dbApi = require('./dbApi.js');
 const api = require('./api.js');
 const normal = require('./normal.js');
 
@@ -71,9 +70,7 @@ module.exports = {
                     });
 
             if (!responded)
-                if (request.url.startsWith('/dbApi/'))
-                    return dbApi.execute(request, response, { middlewareData, extraData });
-                else if (request.url.startsWith('/api/'))
+                if (request.url.startsWith('/api/'))
                     return await api.execute(request, response, { middlewareData, extraData });
                 else
                     return normal.execute(request, response, { middlewareData, extraData });
