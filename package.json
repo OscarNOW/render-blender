@@ -10,7 +10,7 @@
     "license": "ISC",
     "dependencies": {
         "firebase-admin": "^11.9.0",
-        "google-auth-library": "^8.8.0",
+        "google-auth-library": "^8.9.0",
         "googleapis": "^121.0.0",
         "mime-types": "^2.1.35",
         "sniffr": "^1.2.0"
