@@ -51,8 +51,6 @@ module.exports = {
                             },
                             parseError,
                             end: (data) => {
-                                data = data ?? '';
-
                                 let type;
                                 if (typeof data === 'string')
                                     type = 'text/plain';
