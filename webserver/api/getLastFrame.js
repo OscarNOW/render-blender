@@ -17,7 +17,10 @@ module.exports = {
 
         const filePath = path.join(__dirname, `../../worker/output/${id}/`, files[0]);
 
-        response.writeHead(200, { 'Content-Type': 'image/png' });
+        response.writeHead(200, {
+            'Content-Type': 'image/png',
+            'Access-Control-Allow-Origin': '*'
+        });
         fs.createReadStream(filePath).pipe(response);
     }
 }
