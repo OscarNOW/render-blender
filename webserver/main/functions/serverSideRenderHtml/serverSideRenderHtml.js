@@ -35,7 +35,7 @@ module.exports = (html, isPrivate) => {
         const endIndex = html.indexOf(inlineCssEndString, inlineCssIndex);
 
         const cssPath = html.substring(inlineCssIndex + inlineCssStartString.length, endIndex);
-        const parsedCssPath = path.resolve(`.${cssPath}`);
+        const parsedCssPath = path.join(__dirname, '../../../files/', `.${cssPath}`);
         if (!parsedCssPath.startsWith(path.resolve(__dirname, '../../../files/'))) {
             inlineCssIndex = html.indexOf(inlineCssStartString, inlineCssIndex + 1);
             continue;
@@ -45,7 +45,7 @@ module.exports = (html, isPrivate) => {
         const injection = `<style>${css}</style>`;
         const oldValue = inlineCssStartString + cssPath + inlineCssEndString;
 
-        html = html.substring(0, inlineCssIndex) + injection + html.substring(inlineCssIndex + oldValue.length + inlineCssEndString.length);
+        html = html.substring(0, inlineCssIndex) + injection + html.substring(inlineCssIndex + oldValue.length + inlineCssEndString.length - 3);
 
         inlineCssIndex = html.indexOf(inlineCssStartString, inlineCssIndex + 1);
     }
