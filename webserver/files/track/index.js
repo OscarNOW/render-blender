@@ -1,8 +1,9 @@
+import { getCookie } from '/js/cookie.js';
+
 const id = new URLSearchParams(window.location.search).get('id');
-const code = new URLSearchParams(window.location.search).get('code'); //todo: use cookie instead
 
 if (!id) window.location = '/';
-if (!code) window.location = '/';
+if (!getCookie('code')) window.location = '/';
 
 const imageElement = document.getElementById('image');
 const frameNumberElement = document.getElementById('frameNumber');
@@ -19,14 +20,14 @@ async function reload() {
 }
 
 async function reloadFrameNumber() {
-    const resp = await fetch(`/api/getFrameNumber?code=${code}&id=${id}`);
+    const resp = await fetch(`/api/getFrameNumber?code=${getCookie('code')}&id=${id}`);
     const frameNumber = await resp.text();
 
     frameNumberElement.innerText = frameNumber;
 }
 
 async function reloadImage() {
-    const resp = await fetch(`/api/getLastFrame?code=${code}&id=${id}`);
+    const resp = await fetch(`/api/getLastFrame?code=${getCookie('code')}&id=${id}`);
     const image = await resp.blob();
     const imageUrl = URL.createObjectURL(image);
 

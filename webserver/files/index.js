@@ -1,9 +1,12 @@
+import { setCookie } from '/js/cookie.js';
+
 const path = document.getElementById('path');
 const form = document.getElementById('form');
 const code = document.getElementById('code');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    setCookie('code', code.value);
 
     const url = new URL(form.action);
 
