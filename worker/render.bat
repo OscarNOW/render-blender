@@ -1,23 +1,17 @@
 @echo off
-echo Rendering %1 at %2
-echo Blender at %3
 
-if not exist render\ (
-    mkdir render\
+if not exist stages\render\ (
+    mkdir stages\render\
 )
-echo %2>render\%1
-
-if not exist output\ (
-    mkdir output\
+if not exist stages\render\%1\ (
+    echo %2>render\%1\
 )
 
-if not exist output\%1\ (
-    mkdir output\%1\
+if not exist output\render\ (
+    mkdir output\render\
+)
+if not exist output\render\%1\ (
+    mkdir output\render\%1\
 )
 
-%3 -b %2 -F PNG -o %cd%\output\%1\####.png -a
-
-if not exist renderDone\ (
-    mkdir renderDone
-)
-move render\%1 renderDone\%1
+%3 -b %2 -F PNG -o %cd%\output\render\%1\####.png -a
