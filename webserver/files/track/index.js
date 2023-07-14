@@ -13,20 +13,27 @@ document.title = `Track ${id}`;
 setInterval(reload, 1000);
 
 async function reload() {
-    await Promise.all([
-        reloadFrameNumber(),
-        reloadImage()
-    ]);
+    const frameNumber = await getFrameNumber();
+    await reloadImage(frameNumber);
+    renderFrameNumber(frameNumber);
 }
 
-async function reloadFrameNumber() {
-    const resp = await fetch(`/api/getFrameNumber?code=${getCookie('code')}&id=${id}`);
+async function getFrameNumber() {
+    const resp = await fetch(`/api/getLastFrameNumber?code=${getCookie('code')}&id=${id}`);
     const frameNumber = await resp.text();
 
+    return frameNumber;
+}
+
+function renderFrameNumber(frameNumber) {
     frameNumberElement.innerText = frameNumber;
 }
 
-async function reloadImage() {
+let lastFrameNumber;
+async function reloadImage(frameNumber) {
+    if (frameNumber === lastFrameNumber) return;
+    lastFrameNumber = frameNumber;
+
     const resp = await fetch(`/api/getLastFrame?code=${getCookie('code')}&id=${id}`);
     const image = await resp.blob();
     const imageUrl = URL.createObjectURL(image);
