@@ -9,7 +9,7 @@ if (!id) window.location = '/';
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
 
-document.title = `Track ID ${id}: Frame ###`;
+document.title = `Track ID ${id}: Frame ####`;
 
 setInterval(reload, 1000);
 
