@@ -6,10 +6,10 @@ if (!code) window.location.href = '/getCode';
 const id = new URLSearchParams(window.location.search).get('id');
 if (!id) window.location = '/';
 
+document.title = `Render | ID ${id} | Frame ####`;
+
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
-
-document.title = `Render | ID ${id} | Frame ####`;
 
 setInterval(reload, 1000);
 
