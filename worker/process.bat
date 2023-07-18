@@ -13,9 +13,9 @@ if not exist output\ (
     mkdir output\
 )
 
-start /wait render.bat %*
-@REM start /wait video.bat %*
-@REM start /wait done.bat %*
+start /wait "" cmd /c render.bat %*
+@REM start /wait "" cmd /c  video.bat %*
+@REM start /wait "" cmd /c  done.bat %*
 
 echo pausinig
 pause
