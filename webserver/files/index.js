@@ -11,7 +11,7 @@ form.addEventListener('submit', async (e) => {
     const resp = await fetch(`/api/render?code=${code}&filePath=${path.value}`);
     const id = await resp.text();
 
-    window.location.href = `/track?id=${id}`;
+    window.location.href = `/trackFrames?id=${id}`;
 
     return;
 });
