@@ -1,3 +1,3 @@
 @echo off
-start cmd /c process.bat %*
+start /min "" cmd /c process.bat %*
 exit

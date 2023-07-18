@@ -13,6 +13,6 @@ if not exist output\ (
     mkdir output\
 )
 
-start /wait "" cmd /c render.bat %*
-start /wait "" cmd /c  video.bat %*
-start /wait "" cmd /c  done.bat %*
+start /wait /min "" cmd /c render.bat %*
+start /wait /min "" cmd /c video.bat %*
+start /wait /min "" cmd /c done.bat %*
