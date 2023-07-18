@@ -15,7 +15,8 @@
         },
         "error": {
             "reload": "Herladen",
-            "thereIsError": "Er is een fout"
+            "thereIsError": "Er is een fout",
+            "executeFunctionNotFoundWithFile": "Er is geen execute functie gevonden in het bestand {file}"
         }
     }
 }
