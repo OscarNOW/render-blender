@@ -14,5 +14,8 @@ if not exist output\ (
 )
 
 start /wait render.bat %*
-start /wait video.bat %*
-start /wait done.bat %*
+@REM start /wait video.bat %*
+@REM start /wait done.bat %*
+
+echo pausinig
+pause
