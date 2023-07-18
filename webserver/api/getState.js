@@ -10,6 +10,7 @@ module.exports = {
         const id = params.id;
 
         if ((!id) && id !== 0) return statusCode(403, 'invalidId', 'Invalid id');
+        if (!fs.existsSync(path.join(__dirname, '../../worker/stages/'))) return statusCode(403, 'invalidId', 'Invalid id');
 
         let idExists = false;
         let stage;
