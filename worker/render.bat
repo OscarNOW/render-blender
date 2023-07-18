@@ -18,4 +18,4 @@ if not exist output\render\%1\ (
     mkdir output\render\%1\
 )
 
-@REM %3 -b %2 -F PNG -o %cd%\output\render\%1\####.png -a
+%3 -b %2 -F PNG -o "%cd%\output\render\%1\####.png" -a
