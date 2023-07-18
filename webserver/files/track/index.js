@@ -1,9 +1,10 @@
 import { getCookie } from '/js/cookie.js';
 
-const id = new URLSearchParams(window.location.search).get('id');
+const code = getCookie('code');
+if (!code) window.location.href = '/getCode';
 
+const id = new URLSearchParams(window.location.search).get('id');
 if (!id) window.location = '/';
-if (!getCookie('code')) window.location = '/';
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
@@ -19,7 +20,7 @@ async function reload() {
 }
 
 async function getFrameNumber() {
-    const resp = await fetch(`/api/getLastFrameNumber?code=${getCookie('code')}&id=${id}`);
+    const resp = await fetch(`/api/getLastFrameNumber?code=${code}&id=${id}`);
     if (resp.status === 404) return null;
 
     const frameNumber = await resp.text();
@@ -39,8 +40,7 @@ async function reloadFrame(frameNumber) {
 
     if (!frameNumber) return;
 
-    //todo: doesn't load full image all of the time
-    const resp = await fetch(`/api/getLastFrame?code=${getCookie('code')}&id=${id}`);
+    const resp = await fetch(`/api/getLastFrame?code=${code}&id=${id}`);
     const image = await resp.blob();
     const imageUrl = URL.createObjectURL(image);
 
