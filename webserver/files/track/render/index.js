@@ -26,7 +26,7 @@ async function getFrameNumber() {
 }
 
 function renderFrameNumber(frameNumber) {
-    frameNumber ??= '????';
+    frameNumber ??= '####';
 
     frameNumberElement.innerText = frameNumber;
     document.title = `Render | ID ${id} | Frame ${frameNumber}`;
