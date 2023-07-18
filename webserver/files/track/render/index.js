@@ -1,17 +1,14 @@
-import { getCookie } from '/js/cookie.js';
+import { onReload } from '/track/handler.js';
+import { getInfo } from '/js/getInfo.js';
 
-const code = getCookie('code');
-if (!code) window.location.href = '/getCode';
-
-const id = new URLSearchParams(window.location.search).get('id');
-if (!id) window.location = '/';
+const { code, id } = getInfo();
 
 document.title = `Render | ID ${id} | Frame ####`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
 
-setInterval(reload, 1000);
+onReload(reload);
 
 async function reload() {
     const frameNumber = await getFrameNumber();
