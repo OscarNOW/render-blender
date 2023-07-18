@@ -1,3 +1,3 @@
 @echo off
-start cmd /k process.bat %*
+start cmd /c process.bat %*
 exit
