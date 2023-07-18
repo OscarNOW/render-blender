@@ -9,7 +9,7 @@ if (!id) window.location = '/';
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
 
-document.title = `Track Frames ID ${id}: Frame ####`;
+document.title = `Render | ID ${id} | Frame ####`;
 
 setInterval(reload, 1000);
 
@@ -29,8 +29,10 @@ async function getFrameNumber() {
 }
 
 function renderFrameNumber(frameNumber) {
-    frameNumberElement.innerText = frameNumber ?? '???';
-    document.title = `Track Frames ID ${id}: Frame ${frameNumber ?? '???'}`;
+    frameNumber ??= '????';
+
+    frameNumberElement.innerText = frameNumber;
+    document.title = `Render | ID ${id} | Frame ${frameNumber}`;
 }
 
 let lastFrameNumber;
