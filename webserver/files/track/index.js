@@ -4,7 +4,7 @@ const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const { code, id } = getInfo();
 
-document.title = `____ | ID ${id} | ____`;
+document.title = `____ | ID ${id}`;
 await redirect();
 
 async function redirect() {
