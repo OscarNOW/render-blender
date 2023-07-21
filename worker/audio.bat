@@ -27,7 +27,7 @@ copy renderAudio.py temp\temp.py
 set outputFilePath=%cd%\output\audio\%1.wav
 
 cd temp
-powershell -Command "(gc temp.py) -replace '|outputFilePath|', '%outputFilePath%' | Out-File -encoding ASCII temp2.py"
+powershell -Command "(gc temp.py) -replace '_outputFilePath_', '%outputFilePath%' | Out-File -encoding ASCII temp2.py"
 cd ..
 
 %3 -b %2 --python "%cd%\temp\temp2.py"

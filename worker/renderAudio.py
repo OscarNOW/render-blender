@@ -1,6 +1,6 @@
 import bpy
 
-output_audio_path = "|outputFilePath|"
+output_audio_path = "_outputFilePath_"
 
 # todo: get current scene
 scene = bpy.data.scenes[0]
