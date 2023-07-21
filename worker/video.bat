@@ -40,7 +40,8 @@ if not exist ffmpeg\bin\ (
 cd ffmpeg
 cd bin
 
-@REM @REM todo-imp: get fps, amount frames
+@REM todo: add video
+@REM todo-imp: get fps, amount frames
 ffmpeg -framerate 60 -f image2 -i "%filePath%%%04d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes 5 %1.mp4
 move %1.mp4 ..\..\output\video\%1.mp4
 
