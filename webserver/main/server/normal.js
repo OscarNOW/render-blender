@@ -8,7 +8,6 @@ const getExtraHeaders = require('../functions/extraHeaders.js');
 
 const files = require('../setup/preload/files.js');
 
-//todo: move to separate file
 const textFiles = [
     'html',
     'css',

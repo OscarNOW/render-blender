@@ -8,7 +8,6 @@ const getExtraHtmlHeaders = require('../../functions/extraHtmlHeaders.js');
 
 const files = {};
 
-//todo: move to separate file
 const textFiles = [
     'html',
     'css',
