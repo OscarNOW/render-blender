@@ -9,7 +9,7 @@ export function onReload(callback) {
     reloadCallbacks.push(callback);
 }
 
-setInterval(reload, 1000);
+setInterval(reload, 500);
 async function reload() {
     const currentState = await getState({ code, id });
     if (currentState !== ourState) return window.location.replace(`/track?id=${id}`);
