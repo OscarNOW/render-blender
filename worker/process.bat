@@ -14,5 +14,6 @@ if not exist output\ (
 )
 
 start /wait /min "" cmd /c render.bat %*
+start /wait /min "" cmd /c audio.bat %*
 start /wait /min "" cmd /c video.bat %*
 start /wait /min "" cmd /c done.bat %*

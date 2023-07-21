@@ -8,7 +8,7 @@ if not exist stages\video\ (
     mkdir stages\video\
 )
 if not exist stages\video\%1 (
-    move stages\render\%1 stages\video\%1
+    move stages\audio\%1 stages\video\%1
 )
 
 if not exist output\video\ (
