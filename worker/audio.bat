@@ -15,5 +15,19 @@ if not exist output\audio\ (
     mkdir output\audio\
 )
 
-@REM todo-imp: fix command
-%3 -b %2 --python "%cd%\renderAudio.py"
+if not exist temp\ (
+    mkdir temp\
+)
+if exist temp\temp.py (
+    del temp\temp.py
+)
+if exist temp\temp2.py del temp\temp2.py
+copy renderAudio.py temp\temp.py
+
+set outputFilePath=%cd%\output\audio\%1.wav
+
+cd temp
+powershell -Command "(gc temp.py) -replace '|outputFilePath|', '%outputFilePath%' | Out-File -encoding ASCII temp2.py"
+cd ..
+
+%3 -b %2 --python "%cd%\temp\temp2.py"

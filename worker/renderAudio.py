@@ -1,7 +1,6 @@
 import bpy
 
-# todo-imp: specify output path
-output_audio_path = "/path/to/output/audio.wav"
+output_audio_path = "|outputFilePath|"
 
 # todo: get current scene
 scene = bpy.data.scenes[0]
