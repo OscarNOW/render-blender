@@ -25,9 +25,10 @@ if exist temp\temp2.py del temp\temp2.py
 copy renderAudio.py temp\temp.py
 
 set outputFilePath=%cd%\output\audio\%1.wav
+set escapedOutputFilePath=%outputFilePath:\=\\%
 
 cd temp
-powershell -Command "(gc temp.py) -replace '_outputFilePath_', '%outputFilePath%' | Out-File -encoding ASCII temp2.py"
+powershell -Command "(gc temp.py) -replace '_outputFilePath_', '%escapedOutputFilePath%' | Out-File -encoding ASCII temp2.py"
 cd ..
 
 %3 -b %2 --python "%cd%\temp\temp2.py"
