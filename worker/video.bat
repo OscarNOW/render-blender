@@ -16,14 +16,13 @@ if not exist output\video\ (
 )
 
 cd output
+cd audio
+set audioPath=%cd%\%1.wav
+cd ..
+cd ..
+
+cd output
 cd render
-
-if not exist %1\ (
-    msg "%username%" %1 doesn't exist in %cd%
-    pause
-    exit
-)
-
 cd %1
 set filePath=%cd%\
 
@@ -43,9 +42,25 @@ if not exist ffmpeg\bin\ (
 cd ffmpeg
 cd bin
 
-@REM todo: add video
-@REM todo-imp: get fps
-ffmpeg -framerate 60 -f image2 -i "%filePath%%%04d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
+@REM get duration of audio
+
+ffprobe -i "%audioPath%" -show_entries format=duration -v quiet -of csv="p=0">temp.txt
+set /p animationSeconds= < temp.txt
+del temp.txt 
+
+
+@REM calculate fps
+
+powershell -Command "[Math]::Round(%frameAmount%/%animationSeconds%, 0)">temp.txt
+set /p fps= < temp.txt
+del temp.txt
+
+
+@REM generate video
+
+@REM todo: add audio to video
+ffmpeg -framerate %fps% -f image2 -i "%filePath%%%04d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
+
 move %1.mp4 ..\..\output\video\%1.mp4
 
 cd ..
