@@ -27,6 +27,9 @@ if not exist %1\ (
 cd %1
 set filePath=%cd%\
 
+set frameAmount=0
+for %%A in (*) do set /a frameAmount+=1
+
 cd ..
 cd ..
 cd ..
@@ -41,8 +44,8 @@ cd ffmpeg
 cd bin
 
 @REM todo: add video
-@REM todo-imp: get fps, amount frames
-ffmpeg -framerate 60 -f image2 -i "%filePath%%%04d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes 5 %1.mp4
+@REM todo-imp: get fps
+ffmpeg -framerate 60 -f image2 -i "%filePath%%%04d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
 move %1.mp4 ..\..\output\video\%1.mp4
 
 cd ..
