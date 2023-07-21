@@ -5,7 +5,7 @@ output_audio_path = "_outputFilePath_"
 # todo: get current scene
 scene = bpy.data.scenes[0]
 
-if scene.sequence_editor:
+if scene.sequence_editor and len(scene.sequence_editor.sequences) > 0:
     audio_strip = scene.sequence_editor.sequences[0]
     if audio_strip.type == 'SOUND':
         bpy.ops.sound.mixdown(filepath=output_audio_path,
