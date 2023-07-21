@@ -31,4 +31,5 @@ cd temp
 powershell -Command "(gc temp.py) -replace '_outputFilePath_', '%escapedOutputFilePath%' | Out-File -encoding ASCII temp2.py"
 cd ..
 
-%3 -b %2 --python "%cd%\temp\temp2.py"
+@REM %3 -b %2 --python "%cd%\temp\temp2.py" --enable-autoexec
+%3 -b %2 --python "%cd%\temp\temp2.py" --enable-autoexec --python-console
