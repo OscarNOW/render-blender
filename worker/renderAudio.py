@@ -1,6 +1,6 @@
 import bpy
 import wave
-import struct
+import array
 
 
 def create_silent_wav(file_path, framerate, num_frames):
@@ -18,13 +18,8 @@ def create_silent_wav(file_path, framerate, num_frames):
         wav_file.setnframes(nFrames)
         wav_file.setcomptype(compType, compName)
 
-        # Create an array of zero amplitude samples
-        # 16-bit signed integer (little-endian)
-        zero_amplitude = struct.pack('<h', 0)
-        silent_samples = zero_amplitude * nFrames
-
-        # Write the silent samples to the WAV file
-        wav_file.writeframes(silent_samples)
+        silent_samples = array.array('h', [0] * num_frames)
+        wav_file.writeframes(silent_samples.tobytes())
 
 
 def exportEmptyAudio():
