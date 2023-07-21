@@ -16,4 +16,4 @@ if not exist output\audio\ (
 )
 
 @REM todo-imp: fix command
-@REM %3 -b %2 -F PNG -o "%cd%\output\render\%1\####.png" -a
+%3 -b %2 --python "%cd%\renderAudio.py"
