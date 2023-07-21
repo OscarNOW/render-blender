@@ -58,8 +58,7 @@ del temp.txt
 
 @REM generate video
 
-@REM todo: add audio to video
-ffmpeg -framerate %fps% -f image2 -i "%filePath%%%04d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
+ffmpeg -framerate %fps% -f image2 -i "%filePath%%%04d.png" -i "%audioPath%" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
 
 move %1.mp4 ..\..\output\video\%1.mp4
 
