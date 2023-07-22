@@ -36,12 +36,12 @@ async function getLastRenderedFrameNumber() {
     return intFrameNumber;
 }
 
-function renderFrameNumber(frameNumber) {
-    frameNumber ??= '#';
+function renderFrameNumber(orgFrameNumber) {
+    const frameNumber = orgFrameNumber ?? '#';
 
     frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
     document.title = `Frame ${frameNumber}/${lastFrameNumber} | Render | ID ${id}`;
-    progressElement.style.setProperty('--progress', `${(frameNumber / lastFrameNumber) * 100}%`);
+    progressElement.style.setProperty('--progress', `${((orgFrameNumber ?? 0) / lastFrameNumber) * 100}%`);
 }
 
 let lastRenderedFrameNumber;
