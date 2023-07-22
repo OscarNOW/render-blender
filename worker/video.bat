@@ -35,6 +35,8 @@ if not exist ffmpeg\bin\ (
 cd ffmpeg
 cd bin
 
+@REM todo: use new analyze info instead of audio to get fps
+
 @REM get duration of audio
 
 ffprobe -i "%audioPath%" -show_entries format=duration -v quiet -of csv="p=0">temp.txt
