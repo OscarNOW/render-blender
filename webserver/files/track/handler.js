@@ -11,13 +11,17 @@ export function onReload(callback) {
     reloadCallbacks.push(callback);
 }
 
-while (true) {
-    await reload();
+reloadLoop();
 
-    if (document.hasFocus())
-        await wait(500);
-    else
-        await wait(2000);
+async function reloadLoop() {
+    while (true) {
+        await reload();
+
+        if (document.hasFocus())
+            await wait(500);
+        else
+            await wait(2000);
+    }
 }
 
 async function reload() {
