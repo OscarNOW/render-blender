@@ -13,7 +13,14 @@ if not exist output\ (
     mkdir output\
 )
 
-start /wait /min "" cmd /c render.bat %*
+echo.|set /p="%2">stages\audio\%1
 start /wait /min "" cmd /c audio.bat %*
+
+move stages\audio\%1 stages\render\%1
+start /wait /min "" cmd /c render.bat %*
+
+move stages\render\%1 stages\video\%1
 start /wait /min "" cmd /c video.bat %*
+
+move stages\video\%1 stages\done\%1
 start /wait /min "" cmd /c done.bat %*

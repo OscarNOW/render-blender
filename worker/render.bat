@@ -7,9 +7,6 @@
 if not exist stages\render\ (
     mkdir stages\render\
 )
-if not exist stages\render\%1 (
-    echo.|set /p="%2">stages\render\%1
-)
 
 if not exist output\render\ (
     mkdir output\render\

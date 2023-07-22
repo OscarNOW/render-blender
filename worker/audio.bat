@@ -7,9 +7,6 @@
 if not exist stages\audio\ (
     mkdir stages\audio\
 )
-if not exist stages\audio\%1 (
-    move stages\render\%1 stages\audio\%1
-)
 
 if not exist output\audio\ (
     mkdir output\audio\
