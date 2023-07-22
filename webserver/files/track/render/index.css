@@ -1,6 +1,7 @@
 #frame {
     display: block;
-    max-width: 90dvw;
+    max-width: 90vw;
+    max-height: 80vh;
 }
 
 .progressBar {
@@ -16,6 +17,7 @@
 
 .progressBar>div {
     height: 100%;
+    width: var(--progress);
 
     --color: rgb(27, 143, 169);
     --backgroundColor: rgb(153, 212, 225);
@@ -29,7 +31,7 @@
 
 @keyframes moving {
     0% {
-        background-position: 100% 0%;
+        background-position: 100% 100%;
     }
 
     100% {

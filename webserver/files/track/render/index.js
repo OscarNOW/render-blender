@@ -41,7 +41,7 @@ function renderFrameNumber(frameNumber) {
 
     frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
     document.title = `Frame ${frameNumber}/${lastFrameNumber} | Render | ID ${id}`;
-    progressElement.style.width = `${(frameNumber / lastFrameNumber) * 100}%`;
+    progressElement.style.setProperty('--progress', `${(frameNumber / lastFrameNumber) * 100}%`);
 }
 
 let lastRenderedFrameNumber;
