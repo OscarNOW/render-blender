@@ -31,8 +31,7 @@ def exportEmptyAudio():
 
 output_audio_path = "_outputFilePath_"
 
-# todo: get current scene
-scene = bpy.data.scenes[0]
+scene = bpy.context.scene
 
 if scene.sequence_editor and len(scene.sequence_editor.sequences) > 0:
     audio_strip = scene.sequence_editor.sequences[0]
