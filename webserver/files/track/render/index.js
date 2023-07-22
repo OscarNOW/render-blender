@@ -9,6 +9,7 @@ document.title = `Frame #/${lastFrameNumber} | Render | ID ${id}`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
+const progressElement = document.getElementById('progress');
 
 onReload(reload);
 
@@ -40,6 +41,7 @@ function renderFrameNumber(frameNumber) {
 
     frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
     document.title = `Frame ${frameNumber}/${lastFrameNumber} | Render | ID ${id}`;
+    progressElement.style.width = `${(frameNumber / lastFrameNumber) * 100}%`;
 }
 
 let lastRenderedFrameNumber;

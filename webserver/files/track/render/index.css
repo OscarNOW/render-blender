@@ -2,3 +2,37 @@
     display: block;
     max-width: 90dvw;
 }
+
+.progressBar {
+    width: 90vw;
+    height: 5vh;
+    margin-bottom: 20px;
+
+    background-color: rgb(255, 255, 255);
+    border: 3px solid black;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progressBar>div {
+    height: 100%;
+
+    --color: rgb(27, 143, 169);
+    --backgroundColor: rgb(153, 212, 225);
+
+    background-image: repeating-linear-gradient(-45deg, var(--color), var(--color) 5px, var(--backgroundColor) 5px, var(--backgroundColor) 10px);
+    background-size: 250% 250%;
+    animation: moving 10s linear infinite;
+
+    transition: width 0.5s ease;
+}
+
+@keyframes moving {
+    0% {
+        background-position: 100% 0%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
+}
