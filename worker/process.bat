@@ -13,8 +13,12 @@ if not exist output\ (
     mkdir output\
 )
 
+if not exist stages\analyse\ mkdir stages\analyse\
+echo.|set /p="%2">stages\analyse\%1
+start /wait /min "" cmd /c analyse.bat %*
+
 if not exist stages\audio\ mkdir stages\audio\
-echo.|set /p="%2">stages\audio\%1
+move stages\analyse\%1 stages\audio\%1
 start /wait /min "" cmd /c audio.bat %*
 
 if not exist stages\render\ mkdir stages\render\
