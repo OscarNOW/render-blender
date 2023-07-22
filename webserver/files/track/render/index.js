@@ -2,8 +2,10 @@ import { onReload } from '/track/handler.js';
 import { getInfo } from '/js/getInfo.js';
 
 const { code, id } = getInfo();
+document.title = `Frame ####/#### | Render | ID ${id}`;
 
-document.title = `Render | ID ${id} | Frame ####`;
+const lastFrameNumber = await getLastFrameNumber();
+document.title = `Frame ####/${lastFrameNumber} | Render | ID ${id}`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
@@ -14,6 +16,13 @@ async function reload() {
     const frameNumber = await getFrameNumber();
     await reloadFrame(frameNumber);
     renderFrameNumber(frameNumber);
+}
+
+async function getLastFrameNumber() {
+    const resp = await fetch(`/api/getLastFrameNumber?code=${code}&id=${id}`);
+    const frameNumber = await resp.text();
+
+    return frameNumber;
 }
 
 async function getFrameNumber() {
@@ -28,14 +37,14 @@ async function getFrameNumber() {
 function renderFrameNumber(frameNumber) {
     frameNumber ??= '####';
 
-    frameNumberElement.innerText = frameNumber;
-    document.title = `Render | ID ${id} | Frame ${frameNumber}`;
+    frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
+    document.title = `Frame ${frameNumber}/${lastFrameNumber} | Render | ID ${id}`;
 }
 
-let lastFrameNumber;
+let lastRenderedFrameNumber;
 async function reloadFrame(frameNumber) {
-    if (frameNumber === lastFrameNumber) return;
-    lastFrameNumber = frameNumber;
+    if (frameNumber === lastRenderedFrameNumber) return;
+    lastRenderedFrameNumber = frameNumber;
 
     if (!frameNumber) return;
 
