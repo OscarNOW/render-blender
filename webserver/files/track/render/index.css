@@ -30,7 +30,7 @@
     background-size: 250% 250%;
     animation: moving 120s linear infinite;
 
-    transition: width 0.5s ease;
+    transition: left 0.5s ease;
 }
 
 @keyframes moving {
