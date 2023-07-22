@@ -8,4 +8,4 @@ if not exist output\analyse\ (
     mkdir output\analyse\
 )
 
-timeout /nobreak /t 2
+@REM todo
