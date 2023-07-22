@@ -13,7 +13,7 @@ const frameNumberElement = document.getElementById('frameNumber');
 onReload(reload);
 
 async function reload() {
-    const frameNumber = await getFrameNumber();
+    const frameNumber = await getLastRenderedFrameNumber();
     await reloadFrame(frameNumber);
     renderFrameNumber(frameNumber);
 }
@@ -25,13 +25,14 @@ async function getLastFrameNumber() {
     return frameNumber;
 }
 
-async function getFrameNumber() {
+async function getLastRenderedFrameNumber() {
     const resp = await fetch(`/api/getLastRenderedFrameNumber?code=${code}&id=${id}`);
     if (resp.status === 404) return null;
 
     const frameNumber = await resp.text();
+    const intFrameNumber = isNaN(parseInt(frameNumber)) ? frameNumber : parseInt(frameNumber);
 
-    return frameNumber;
+    return intFrameNumber;
 }
 
 function renderFrameNumber(frameNumber) {
