@@ -28,7 +28,7 @@ async function getLastFrameNumber() {
 
 async function getLastRenderedFrameNumber() {
     const resp = await fetch(`/api/getLastRenderedFrameNumber?code=${code}&id=${id}`);
-    if (resp.status === 404) return null;
+    if (resp.status === 404) return 0;
 
     const frameNumber = await resp.text();
     const intFrameNumber = isNaN(parseInt(frameNumber)) ? frameNumber : parseInt(frameNumber);
