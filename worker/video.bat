@@ -26,6 +26,14 @@ cd ..
 cd ..
 cd ..
 
+cd output
+cd analyse
+cd %1
+set /p fps= < framerate.txt
+cd ..
+cd ..
+cd ..
+
 if not exist ffmpeg\bin\ (
     msg "%username%" ffmpeg\bin\ doesn't exist in %cd%
     pause
@@ -34,24 +42,6 @@ if not exist ffmpeg\bin\ (
 
 cd ffmpeg
 cd bin
-
-@REM todo: use new analyze info instead of audio to get fps
-
-@REM get duration of audio
-
-ffprobe -i "%audioPath%" -show_entries format=duration -v quiet -of csv="p=0">temp.txt
-set /p animationSeconds= < temp.txt
-del temp.txt 
-
-
-@REM calculate fps
-
-powershell -Command "[Math]::Round(%frameAmount%/%animationSeconds%, 0)">temp.txt
-set /p fps= < temp.txt
-del temp.txt
-
-
-@REM generate video
 
 ffmpeg -framerate %fps% -f image2 -i "%filePath%%%04d.png" -i "%audioPath%" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
 
