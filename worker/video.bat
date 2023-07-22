@@ -4,10 +4,6 @@
 @REM %2     project path
 @REM %3     blender path
 
-if not exist stages\video\ (
-    mkdir stages\video\
-)
-
 if not exist output\video\ (
     mkdir output\video\
 )

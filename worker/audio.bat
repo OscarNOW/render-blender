@@ -4,10 +4,6 @@
 @REM %2     project path
 @REM %3     blender path
 
-if not exist stages\audio\ (
-    mkdir stages\audio\
-)
-
 if not exist output\audio\ (
     mkdir output\audio\
 )
