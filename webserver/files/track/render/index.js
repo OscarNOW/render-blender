@@ -17,7 +17,7 @@ async function reload() {
 }
 
 async function getFrameNumber() {
-    const resp = await fetch(`/api/getLastFrameNumber?code=${code}&id=${id}`);
+    const resp = await fetch(`/api/getLastRenderedFrameNumber?code=${code}&id=${id}`);
     if (resp.status === 404) return null;
 
     const frameNumber = await resp.text();
@@ -39,7 +39,7 @@ async function reloadFrame(frameNumber) {
 
     if (!frameNumber) return;
 
-    const resp = await fetch(`/api/getLastFrame?code=${code}&id=${id}`);
+    const resp = await fetch(`/api/getLastRenderedFrame?code=${code}&id=${id}`);
     const image = await resp.blob();
     const imageUrl = URL.createObjectURL(image);
 
