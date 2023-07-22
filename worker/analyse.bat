@@ -11,7 +11,7 @@ cd output
 cd analyse
 cd %1
 
-set outputPath=%cd%
+set outputPath=%cd%\
 set escapedOutputPath=%outputPath:\=\\%
 
 cd ..
