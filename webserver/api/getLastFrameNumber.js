@@ -13,7 +13,7 @@ module.exports = {
         if (!fs.existsSync(path.join(__dirname, `../../worker/output/analyse/${id}/`))) return statusCode(403, 'invalidId', 'Invalid id');
 
         const baseFilePath = path.join(__dirname, '../../worker/output/analyse/');
-        const filePath = path.join(__dirname, baseFilePath, `/${id}/`, 'lastFrame.txt');
+        const filePath = path.join(baseFilePath, `/${id}/`, 'lastFrame.txt');
 
         if (!filePath.startsWith(baseFilePath)) return statusCode(403, 'invalidId', 'Invalid id');
         if (!fs.existsSync(filePath)) return statusCode(403, 'invalidId', 'Invalid id');
