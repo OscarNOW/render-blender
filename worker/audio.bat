@@ -8,13 +8,10 @@ if not exist output\audio\ (
     mkdir output\audio\
 )
 
-if not exist temp\ (
-    mkdir temp\
-)
-if exist temp\temp.py (
-    del temp\temp.py
-)
+if not exist temp\ mkdir temp\
+if exist temp\temp.py del temp\temp.py
 if exist temp\temp2.py del temp\temp2.py
+
 copy renderAudio.py temp\temp.py
 
 set outputFilePath=%cd%\output\audio\%1.wav
