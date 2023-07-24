@@ -1,10 +1,10 @@
-import { getState } from '/js/getState.js';
+import { getStage } from '/js/getStage.js';
 import { getInfo } from '/js/getInfo.js';
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const { code, id } = getInfo();
-const currentState = window.location.href.split('/track/')[1].split('?')[0].split('/')[0];
+const currentStage = window.location.href.split('/track/')[1].split('?')[0].split('/')[0];
 
 const reloadCallbacks = [];
 export function onReload(callback) {
@@ -25,8 +25,8 @@ async function reloadLoop() {
 }
 
 async function reload() {
-    const newState = await getState({ code, id });
-    if (newState !== currentState) return window.location.replace(`/track/${newState}?id=${id}`);
+    const newStage = await getStage({ code, id });
+    if (newStage !== currentStage) return window.location.replace(`/track/${newStage}?id=${id}`);
 
     for (const callback of reloadCallbacks)
         await callback();
