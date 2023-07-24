@@ -17,7 +17,7 @@ form.addEventListener('submit', async (e) => {
     return;
 });
 
-const ids = await fetch(`/api/getAllProjects?code=${code}`).then(resp => resp.json());
+const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
 for (const id of ids)
     renderId(id);
 
@@ -28,16 +28,34 @@ async function renderId(id) {
     idTd.innerText = id;
     tr.appendChild(idTd);
 
-    const stageId = document.createElement('td');
-    stageId.innerText = '____';
-    tr.appendChild(stageId);
+    const stageTd = document.createElement('td');
+    stageTd.innerText = '____';
+    tr.appendChild(stageTd);
 
     const actionTd = document.createElement('td');
-    actionTd.innerText = 'todo'; //todo: add action buttons like delete and track
+
+    const trackButton = document.createElement('button');
+    trackButton.innerText = 'track';
+    trackButton.addEventListener('click', () => {
+        window.location.href = `/track?id=${id}`;
+    });
+    actionTd.appendChild(trackButton);
+
+    //todo: add delete button
+    //todo: add stop button
+    //todo: add start button
+
     tr.appendChild(actionTd);
+
+    //todo: add project path
 
     table.appendChild(tr);
 
-    const stage = await fetch(`/api/getStage?code=${code}`)
+    await updateStage(id, stageTd);
+    setInterval(() => updateStage(id, stageTd), 2000);
+}
 
+async function updateStage(id, stageTd) {
+    const stage = await fetch(`/api/getStage?code=${code}&id=${id}`).then((resp) => resp.text());
+    stageTd.innerText = stage;
 }
