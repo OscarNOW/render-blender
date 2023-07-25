@@ -19,7 +19,8 @@ form.addEventListener('submit', async (e) => {
 
 loadIds();
 async function loadIds() {
-    //todo-imp: clear table
+    while ([...table.children].length > 1)
+        table.removeChild(table.lastChild);
 
     const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
     for (const id of ids)
