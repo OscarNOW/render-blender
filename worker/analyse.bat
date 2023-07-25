@@ -25,7 +25,7 @@ if exist temp\temp2.%1.py del temp\temp2.%1.py
 copy analyse.py temp\temp.py
 
 cd temp
-powershell -Command "(gc temp.py) -replace '_outputPath_', '%escapedOutputPath%' | Out-File -encoding ASCII temp2.py"
+powershell -Command "(gc temp.py) -replace '_outputPath_', '%escapedOutputPath%' | Out-File -encoding ASCII temp2.py" < nul
 cd ..
 
 %3 -b %2 --python "%cd%\temp\temp2.py" --enable-autoexec
