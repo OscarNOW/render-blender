@@ -1,3 +1,3 @@
 @echo off
 start /min "" cmd /c start.bat %*
-exit %errorlevel%
+exit
