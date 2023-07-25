@@ -10,9 +10,6 @@ startButton.addEventListener('click', async () => {
     startButton.style.cursor = 'wait';
 
     await fetch(`/api/start?code=${code}&id=${id}`);
-
-    startButton.disabled = false;
-    startButton.style.cursor = null;
 });
 startButton.disabled = false;
 startButton.style.cursor = null;

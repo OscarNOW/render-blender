@@ -115,10 +115,6 @@ async function renderId(id) {
         deleteButton.style.cursor = 'wait';
 
         await fetch(`/api/delete?code=${code}&id=${id}`);
-
-        deleteButton.disabled = false;
-        deleteButton.style.cursor = null;
-
         reloadIds();
     });
     actionTd.appendChild(deleteButton);
