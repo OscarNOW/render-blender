@@ -36,8 +36,8 @@ cd ..
 
 if not exist ffmpeg\bin\ (
     msg "%username%" ffmpeg\bin\ doesn't exist in %cd%
-    pause
-    exit
+    echo ffmpeg\bin\ doesn't exist in %cd%
+    exit /b 1
 )
 
 cd ffmpeg
