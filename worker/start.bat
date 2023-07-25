@@ -35,11 +35,14 @@ if not exist stages\!stage!\!id! exit /b
 
 if not exist stages\!stage!\ mkdir stages\!stage!\
 
-start /wait /min "" cmd /c !stage!.bat !id! !projectPath! !blenderPath!
+start /wait /min "" cmd /k !stage!.bat !id! !projectPath! !blenderPath!
 set el=%errorlevel%
 if not "z%el%"=="z0" exit /b %el%
 
-if not "z!nextStage!"=="znone" move stages\!stage!\!id! stages\!nextStage!\!id!
+if not "z!nextStage!"=="znone" (
+    if not exist stages\!nextStage!\ mkdir stages\!nextStage!\
+    move stages\!stage!\!id! stages\!nextStage!\!id!
+)
 
 exit /b
 
@@ -51,6 +54,7 @@ if "z!stage!"=="zerror" (
     msg "%username%" There has been an error in the error handling of the worker batch script
     echo There has been an error in the error handling of the worker batch script
 ) else (
+    if not exist stages\error\ mkdir stages\error\
     move stages\!stage!\!id! stages\error\!id!
     call :stage error none
 )
