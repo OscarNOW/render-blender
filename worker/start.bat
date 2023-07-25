@@ -8,16 +8,8 @@ set blenderPath=%3
 echo Processing !id! at !projectPath!
 echo Blender at !blenderPath!
 
-if not exist stages\ (
-    mkdir stages\
-)
-if not exist output\ (
-    mkdir output\
-)
-
-@REM todo: make a create batch file that does this
-if not exist stages\starting\ mkdir stages\starting
-echo.|set /p="!projectPath!">stages\starting\!id!
+if not exist stages\ mkdir stages\
+if not exist output\ mkdir output\
 
 call :stage starting analyse
 call :stage analyse audio

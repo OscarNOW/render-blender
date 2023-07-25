@@ -1,5 +1,3 @@
-//todo: split into create and start
-
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -20,13 +18,13 @@ module.exports = {
 
         const id = Math.floor(Math.random() * 10000);
 
-        render(id, filePath);
+        create(id, filePath);
         end(`${id}`);
     }
 }
 
-function render(id, filePath) {
-    const process = spawn(`"${path.join(__dirname, '../../worker/launchProcess.bat')}"`, [id, `"${filePath}"`, `"${blenderPath}"`], { shell: true, cwd: path.join(__dirname, '../../worker/') });
+function create(id, filePath) {
+    const process = spawn(`"${path.join(__dirname, '../../worker/create.bat')}"`, [id, `"${filePath}"`, `"${blenderPath}"`], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
     process.stdout.on('data', (data) => {
         console.log(data.toString());
