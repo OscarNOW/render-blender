@@ -7,8 +7,8 @@ setlocal ENABLEDELAYEDEXPANSION
 
 if exist output\error\%1.txt exit /b 0
 
-set errorMessage=There has been an unknown error
-if exist temp\error.%1.txt set /p errorMessage=< temp\error.%1.txt
+if not exist temp\error.%1.txt ( echo|set /p="There has been an unknown error in the start batch file of the worker">output\error\%1.txt )
+set /p errorMessage=< temp\error.%1.txt
 
 echo Error:
 echo !errorMessage!
