@@ -12,3 +12,5 @@ if not exist stages\ mkdir stages\
 
 if not exist stages\starting\ mkdir stages\starting
 echo.|set /p="!projectPath!">stages\starting\!id!
+
+exit /b
