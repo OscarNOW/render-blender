@@ -15,3 +15,4 @@ echo !errorMessage!
 
 if not exist output\error\ mkdir output\error\
 echo|set /p="!errorMessage!">output\error\%1.txt
+exit /b 0
