@@ -15,7 +15,7 @@ module.exports = {
             for (const checkStage of fs.readdirSync(path.join(__dirname, '../../worker/stages/')))
                 for (const checkId of fs.readdirSync(path.join(__dirname, `../../worker/stages/${checkStage}/`)))
                     if (checkId === id)
-                        return end(fs.readFileSync(path.join(__dirname, `../../worker/stages/${checkStage}/${id}`)).toString().slice(1, -1));
+                        return end(fs.readFileSync(path.join(__dirname, `../../worker/stages/${checkStage}/${checkId}`)).toString().slice(1, -1));
 
         return statusCode(403, 'invalidId', 'Invalid id');
     }

@@ -14,7 +14,7 @@ module.exports = {
             for (const checkStage of fs.readdirSync(path.join(__dirname, '../../worker/stages/')))
                 for (const checkId of fs.readdirSync(path.join(__dirname, `../../worker/stages/${checkStage}/`)))
                     if (checkId === id)
-                        fs.rmSync(path.join(__dirname, `../../worker/stages/${checkStage}/${id}/`));
+                        fs.rmSync(path.join(__dirname, `../../worker/stages/${checkStage}/${checkId}/`));
 
         if (fs.existsSync(path.join(__dirname, '../../worker/output/')))
             for (const checkStage of fs.readdirSync(path.join(__dirname, '../../worker/output/')))
