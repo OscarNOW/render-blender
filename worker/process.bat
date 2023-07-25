@@ -19,6 +19,7 @@ if not exist output\ (
 if not exist stages\starting\ mkdir stages\starting
 echo.|set /p="!projectPath!">stages\starting\!id!
 
+call :stage starting analyse
 call :stage analyse audio
 call :stage audio render
 call :stage render video
