@@ -1,7 +1,7 @@
-import { getCookie } from '/js/cookie.js';
-const code = getCookie('code');
-if (!code) window.location.href = '/getCode';
+import { getInfo } from '/js/getInfo.js';
+const { code } = getInfo({ requireId: false });
 
+const startAllButton = document.getElementById('startAllButton');
 const path = document.getElementById('path');
 const form = document.getElementById('form');
 const table = document.getElementById('table');
@@ -21,11 +21,42 @@ loadIds();
 async function loadIds() {
     const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
 
+    updateStartAllButton(ids);
+
     while ([...table.children].length > 1)
         table.lastChild.remove();
 
     for (const id of ids)
         renderId(id);
+}
+
+let startAllButtonClickListener = null;
+function updateStartAllButton(ids) {
+    startAllButton.disabled = true;
+    startAllButton.style.cursor = 'wait';
+
+    if (startAllButtonClickListener)
+        startAllButton.removeEventListener('click', startAllButtonClickListener);
+
+    startAllButtonClickListener = async () => {
+        startAllButton.disabled = true;
+        startAllButton.style.cursor = 'wait';
+
+        await startAll(ids);
+
+        startAllButton.disabled = false;
+        startAllButton.style.cursor = null;
+    };
+
+    startAllButton.addEventListener('click', startAllButtonClickListener);
+
+    startAllButton.disabled = false;
+    startAllButton.style.cursor = null;
+}
+
+async function startAll(ids) {
+    for (const id of ids)
+        await fetch(`/api/start?code=${code}&id=${id}`);
 }
 
 async function renderId(id) {
