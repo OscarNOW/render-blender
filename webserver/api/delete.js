@@ -18,11 +18,9 @@ module.exports = {
 
         if (fs.existsSync(path.join(__dirname, '../../worker/output/')))
             for (const checkStage of fs.readdirSync(path.join(__dirname, '../../worker/output/')))
-                for (const checkId of fs.readdirSync(path.join(__dirname, `../../worker/output/${checkStage}/`)))
-                    if (checkId === id)
-                        fs.rmSync(path.join(__dirname, `../../worker/output/${checkStage}/${id}/`), { recursive: true });
-
-        //todo: make sure all outputs are deleted
+                for (const checkName of fs.readdirSync(path.join(__dirname, `../../worker/output/${checkStage}/`)))
+                    if (checkName.split('.')[0] === id)
+                        fs.rmSync(path.join(__dirname, `../../worker/output/${checkStage}/${checkName}`), { recursive: true });
 
         end();
     }
