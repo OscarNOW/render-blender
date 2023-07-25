@@ -17,9 +17,14 @@ form.addEventListener('submit', async (e) => {
     return;
 });
 
-const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
-for (const id of ids)
-    renderId(id);
+loadIds();
+async function loadIds() {
+    //todo-imp: clear table
+
+    const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
+    for (const id of ids)
+        renderId(id);
+}
 
 async function renderId(id) {
     const tr = document.createElement('tr');
@@ -41,7 +46,21 @@ async function renderId(id) {
     });
     actionTd.appendChild(trackButton);
 
-    //todo: add delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.innerText = 'delete';
+    deleteButton.addEventListener('click', async () => {
+        deleteButton.disabled = true;
+        deleteButton.style.cursor = 'loading';
+
+        await fetch(`/api/delete?code=${code}&id=${id}`);
+
+        deleteButton.disabled = false;
+        deleteButton.style.cursor = null;
+
+        loadIds(); //reload the table
+    });
+    actionTd.appendChild(deleteButton);
+
     //todo: add stop button
     //todo: add start button
 
