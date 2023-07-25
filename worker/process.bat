@@ -1,10 +1,10 @@
 @echo off
-echo Rendering %1 at %2
-echo Blender at %3
+set id=%1
+set projectPath=%2
+set blenderPath=%3
 
-@REM %1     id
-@REM %2     project path
-@REM %3     blender path
+echo Processing %id% at %projectPath%
+echo Blender at %blenderPath%
 
 if not exist stages\ (
     mkdir stages\
@@ -13,11 +13,8 @@ if not exist output\ (
     mkdir output\
 )
 
-call :stage "analyse"
-exit /b
-
 @REM todo: make a create batch file that does this line
-echo.|set /p="%2">stages\analyse\%1
+echo.|set /p="%projectPath%">stages\analyse\%id%
 
 call :stage analyse audio
 call :stage audio render
@@ -27,28 +24,30 @@ call :stage done none
 exit /b
 
 :stage
-@REM %~1    stage (stage)
-@REM %~2    nextStage (stage/none)
+set stage=%~1
+set nextStage=%~2
 
-call :stageCore %~1 %~2
-if errorlevel 1 call :error
+call :stageCore %stage% %nextStage%
+if errorlevel 1 call :error %stage% %nextStage%
 exit /b
 
 :stageCore
-@REM %~1    stage (stage)
-@REM %~2    nextStage (stage/none)
+set stage=%~1
+set nextStage=%~2
 
-if not exist stages\%~1\%1 exit /b
+if not exist stages\%stage%\%id% exit /b
 
-if not exist stages\%~1\ mkdir stages\%~1\
-start /wait /min "" cmd /c %~1.bat %*
-if not "z%~2"=="znone" move stages\%~1\%1 stages\%~2\%1
+if not exist stages\%stage%\ mkdir stages\%stage%\
+start /wait /min "" cmd /c %stage%.bat %*
+if not "z%nextStage%"=="znone" move stages\%stage%\%id% stages\%nextStage%\%id%
 
 exit /b
 
 :error
+set stage=%~1
+set nextStage=%~2
+
 @REM todo: change stage to error and output error message in error output
-msg "%username%" There has been an error in the worker batch script. Pausing...
-echo There has been an error in the worker batch script. Pausing...
-pause
+msg "%username%" There has been an error in the worker batch script. Stage: "%stage%", nextStage: "%nextStage%".
+echo There has been an error in the worker batch script. Stage: "%stage%", nextStage: "%nextStage%".
 exit /b
