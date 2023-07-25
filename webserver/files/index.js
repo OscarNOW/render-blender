@@ -1,5 +1,5 @@
 import { getInfo } from '/js/getInfo.js';
-const { code } = getInfo({ requireId: false });
+const { code } = getInfo({ skipId: true });
 
 const startAllButton = document.getElementById('startAllButton');
 const path = document.getElementById('path');
