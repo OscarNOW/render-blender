@@ -47,7 +47,10 @@ exit /b
 set stage=%~1
 set nextStage=%~2
 
-@REM todo: change stage to error and output error message in error output
-msg "%username%" There has been an error in the worker batch script. Stage: "!stage!", nextStage: "!nextStage!".
-echo There has been an error in the worker batch script. Stage: "!stage!", nextStage: "!nextStage!".
+if "z!stage!"=="zerror" (
+    msg "%username%" There has been an error in the error handling of the worker batch script
+    echo There has been an error in the error handling of the worker batch script
+) else (
+    call :stage error none
+)
 exit /b
