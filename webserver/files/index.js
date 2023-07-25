@@ -68,8 +68,21 @@ async function renderId(id) {
     });
     actionTd.appendChild(deleteButton);
 
+    const startButton = document.createElement('button');
+    startButton.classList.add('start');
+    startButton.innerText = 'start';
+    startButton.addEventListener('click', async () => {
+        startButton.disabled = true;
+        startButton.style.cursor = 'wait';
+
+        await fetch(`/api/start?code=${code}&id=${id}`);
+
+        startButton.disabled = false;
+        startButton.style.cursor = null;
+    });
+    actionTd.appendChild(startButton);
+
     //todo: add stop button
-    //todo: add start button
 
     tr.appendChild(actionTd);
 
