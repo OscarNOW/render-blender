@@ -11,7 +11,7 @@ echo Blender at !blenderPath!
 if not exist stages\ mkdir stages\
 if not exist output\ mkdir output\
 
-call :stage starting analyse
+call :stage notStarted analyse
 call :stage analyse audio
 call :stage audio render
 call :stage render video

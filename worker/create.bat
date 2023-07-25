@@ -10,7 +10,7 @@ echo Blender at !blenderPath!
 
 if not exist stages\ mkdir stages\
 
-if not exist stages\starting\ mkdir stages\starting
-echo.|set /p="!projectPath!">stages\starting\!id!
+if not exist stages\notStarted\ mkdir stages\notStarted
+echo.|set /p="!projectPath!">stages\notStarted\!id!
 
 exit /b
