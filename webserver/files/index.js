@@ -63,7 +63,7 @@ async function renderId(id) {
         deleteButton.disabled = false;
         deleteButton.style.cursor = null;
 
-        loadIds(); //reload the table
+        tr.remove();
     });
     actionTd.appendChild(deleteButton);
 
