@@ -8,22 +8,14 @@ module.exports = {
         if (params.code !== code) return statusCode(403, 'wrongCode', 'Wrong code');
 
         const id = params.id;
-
         if ((!id) && id !== 0) return statusCode(403, 'invalidId', 'Invalid id');
 
-        let idExists = false;
-        let stage;
         if (fs.existsSync(path.join(__dirname, '../../worker/stages/')))
             for (const checkStage of fs.readdirSync(path.join(__dirname, '../../worker/stages/')))
-                for (const checkId of fs.readdirSync(path.join(__dirname, `../../worker/stages/${checkStage}/`))) {
-                    if ((!idExists) && checkId === id) {
-                        idExists = true;
-                        stage = checkStage;
-                    }
-                }
+                for (const checkId of fs.readdirSync(path.join(__dirname, `../../worker/stages/${checkStage}/`)))
+                    if (checkId === id)
+                        return end(checkStage);
 
-        if (!idExists) return statusCode(403, 'invalidId', 'Invalid id');
-
-        end(stage);
+        return statusCode(403, 'invalidId', 'Invalid id');
     }
 }
