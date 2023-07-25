@@ -41,7 +41,7 @@ if not exist stages\!stage!\!id! exit /b
 
 if not exist stages\!stage!\ mkdir stages\!stage!\
 
-start /wait /min "" cmd /c !stage!.bat %*
+start /wait /min "" cmd /c !stage!.bat !id! !projectPath! !blenderPath!
 set el=%errorlevel%
 if not "z%el%"=="z0" exit /b %el%
 
