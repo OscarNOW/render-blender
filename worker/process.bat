@@ -13,22 +13,41 @@ if not exist output\ (
     mkdir output\
 )
 
-if not exist stages\analyse\ mkdir stages\analyse\
+call :stage "analyse"
+exit /b
+
+@REM todo: make a create batch file that does this line
 echo.|set /p="%2">stages\analyse\%1
-start /wait /min "" cmd /c analyse.bat %*
 
-if not exist stages\audio\ mkdir stages\audio\
-move stages\analyse\%1 stages\audio\%1
-start /wait /min "" cmd /c audio.bat %*
+call :stage analyse audio
+call :stage audio render
+call :stage render video
+call :stage video done
+call :stage done none
 
-if not exist stages\render\ mkdir stages\render\
-move stages\audio\%1 stages\render\%1
-start /wait /min "" cmd /c render.bat %*
+:stage
+@REM %~1    stage (stage)
+@REM %~2    nextStage (stage/none)
 
-if not exist stages\video\ mkdir stages\video\
-move stages\render\%1 stages\video\%1
-start /wait /min "" cmd /c video.bat %*
+call :stageCore %~1 %~2
+if errorlevel 1 call :error
+exit /b
 
-if not exist stages\done\ mkdir stages\done\
-move stages\video\%1 stages\done\%1
-start /wait /min "" cmd /c done.bat %*
+:stageCore
+@REM %~1    stage (stage)
+@REM %~2    nextStage (stage/none)
+
+if not exist stages\%~1\%1 exit /b
+
+if not exist stages\%~1\ mkdir stages\%~1\
+start /wait /min "" cmd /c %~1.bat %*
+if not "z%~2"=="znone" move stages\%~1\%1 stages\%~2\%1
+
+exit /b
+
+:error
+@REM todo: change stage to error and output error message in error output
+msg "%username%" There has been an error in the worker batch script. Pausing...
+echo There has been an error in the worker batch script. Pausing...
+pause
+exit /b
