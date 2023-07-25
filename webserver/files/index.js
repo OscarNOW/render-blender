@@ -2,6 +2,7 @@ import { getInfo } from '/js/getInfo.js';
 const { code } = getInfo({ skipId: true });
 
 const startAllButton = document.getElementById('startAllButton');
+const deleteAllButton = document.getElementById('deleteAllButton');
 const path = document.getElementById('path');
 const form = document.getElementById('form');
 const table = document.getElementById('table');
@@ -17,11 +18,12 @@ form.addEventListener('submit', async (e) => {
     return;
 });
 
-loadIds();
-async function loadIds() {
+reloadIds();
+async function reloadIds() {
     const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
 
     updateStartAllButton(ids);
+    updateDeleteAllButton(ids);
 
     while ([...table.children].length > 1)
         table.lastChild.remove();
@@ -42,7 +44,8 @@ function updateStartAllButton(ids) {
         startAllButton.disabled = true;
         startAllButton.style.cursor = 'wait';
 
-        await startAll(ids);
+        for (const id of ids)
+            await fetch(`/api/start?code=${code}&id=${id}`);
 
         startAllButton.disabled = false;
         startAllButton.style.cursor = null;
@@ -54,9 +57,30 @@ function updateStartAllButton(ids) {
     startAllButton.style.cursor = null;
 }
 
-async function startAll(ids) {
-    for (const id of ids)
-        await fetch(`/api/start?code=${code}&id=${id}`);
+let deleteAllButtonClickListener = null;
+function updateDeleteAllButton(ids) {
+    deleteAllButton.disabled = true;
+    deleteAllButton.style.cursor = 'wait';
+
+    if (deleteAllButtonClickListener)
+        deleteAllButton.removeEventListener('click', deleteAllButtonClickListener);
+
+    deleteAllButtonClickListener = async () => {
+        deleteAllButton.disabled = true;
+        deleteAllButton.style.cursor = 'wait';
+
+        for (const id of ids)
+            await fetch(`/api/delete?code=${code}&id=${id}`);
+        reloadIds();
+
+        deleteAllButton.disabled = false;
+        deleteAllButton.style.cursor = null;
+    };
+
+    deleteAllButton.addEventListener('click', deleteAllButtonClickListener);
+
+    deleteAllButton.disabled = false;
+    deleteAllButton.style.cursor = null;
 }
 
 async function renderId(id) {
@@ -95,7 +119,7 @@ async function renderId(id) {
         deleteButton.disabled = false;
         deleteButton.style.cursor = null;
 
-        tr.remove();
+        reloadIds();
     });
     actionTd.appendChild(deleteButton);
 
