@@ -22,7 +22,7 @@ async function loadIds() {
     const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
 
     while ([...table.children].length > 1)
-        table.removeChild(table.lastChild);
+        table.lastChild.remove();
 
     for (const id of ids)
         renderId(id);
