@@ -9,7 +9,7 @@ const table = document.getElementById('table');
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const resp = await fetch(`/api/render?code=${code}&filePath=${path.value}`);
+    const resp = await fetch(`/api/create?code=${code}&filePath=${path.value}`);
     const id = await resp.text();
 
     window.location.href = `/track?id=${id}`;

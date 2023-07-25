@@ -5,7 +5,7 @@ const { code } = require('../secret.json');
 
 module.exports = {
     execute({ end, params, statusCode }) {
-        if (params.code !== code) return statusCode(403, 'wrongCode', 'Wrong code');
+        if (params.code !== code) return statusCode(403, 'wrongCode', 'The code provided is not the correct one');
         const ids = [];
 
         if (fs.existsSync(path.join(__dirname, '../../worker/stages/')))
