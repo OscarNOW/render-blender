@@ -15,8 +15,9 @@ if not exist output\ (
     mkdir output\
 )
 
-@REM todo: make a create batch file that does this line
-echo.|set /p="!projectPath!">stages\analyse\!id!
+@REM todo: make a create batch file that does this
+if not exist stages\starting\ mkdir stages\starting
+echo.|set /p="!projectPath!">stages\starting\!id!
 
 call :stage analyse audio
 call :stage audio render
