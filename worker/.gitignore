@@ -1,5 +1,6 @@
 output/
 stages/
 ffmpeg/
+ffmpeg2/
 temp/
 temp.txt
