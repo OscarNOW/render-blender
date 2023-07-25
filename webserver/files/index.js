@@ -57,7 +57,7 @@ async function renderId(id) {
     deleteButton.innerText = 'delete';
     deleteButton.addEventListener('click', async () => {
         deleteButton.disabled = true;
-        deleteButton.style.cursor = 'loading';
+        deleteButton.style.cursor = 'wait';
 
         await fetch(`/api/delete?code=${code}&id=${id}`);
 
