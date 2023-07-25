@@ -11,8 +11,7 @@ deleteButton.addEventListener('click', async () => {
 
     await fetch(`/api/delete?code=${code}&id=${id}`);
 
-    deleteButton.disabled = false;
-    deleteButton.style.cursor = null;
+    window.location.replace('/');
 });
 deleteButton.disabled = false;
 deleteButton.style.cursor = null;
