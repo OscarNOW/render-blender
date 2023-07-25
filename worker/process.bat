@@ -24,6 +24,7 @@ call :stage audio render
 call :stage render video
 call :stage video done
 call :stage done none
+exit /b
 
 :stage
 @REM %~1    stage (stage)
