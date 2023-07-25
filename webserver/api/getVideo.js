@@ -10,8 +10,11 @@ module.exports = {
         const id = params.id;
         if ((!id) && id !== 0) return statusCode(403, 'invalidId', 'Invalid id');
 
-        //todo-imp: do baseFilePath check
-        throw new Error('todo')
+        const baseFilePath = path.join(__dirname, '../../worker/output/video/');
+        const filePath = path.join(baseFilePath, `/${id}.mp4`); //todo: test if the / before ${id} is needed
+
+        if (!filePath.startsWith(baseFilePath)) return statusCode(403, 'invalidId', 'Invalid id');
+        if (!fs.existsSync(filePath)) return statusCode(403, 'invalidId', 'Invalid id');
 
         response.writeHead(200, {
             'Content-Type': 'video/mp4',
