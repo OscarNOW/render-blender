@@ -1,10 +1,12 @@
 @echo off
+setlocal ENABLEDELAYEDEXPANSION
+
 set id=%1
 set projectPath=%2
 set blenderPath=%3
 
-echo Processing %id% at %projectPath%
-echo Blender at %blenderPath%
+echo Processing !id! at !projectPath!
+echo Blender at !blenderPath!
 
 if not exist stages\ (
     mkdir stages\
@@ -14,7 +16,7 @@ if not exist output\ (
 )
 
 @REM todo: make a create batch file that does this line
-echo.|set /p="%projectPath%">stages\analyse\%id%
+echo.|set /p="!projectPath!">stages\analyse\!id!
 
 call :stage analyse audio
 call :stage audio render
@@ -27,23 +29,23 @@ exit /b
 set stage=%~1
 set nextStage=%~2
 
-call :stageCore %stage% %nextStage%
-if errorlevel 1 call :error %stage% %nextStage%
+call :stageCore !stage! !nextStage!
+if errorlevel 1 call :error !stage! !nextStage!
 exit /b
 
 :stageCore
 set stage=%~1
 set nextStage=%~2
 
-if not exist stages\%stage%\%id% exit /b
+if not exist stages\!stage!\!id! exit /b
 
-if not exist stages\%stage%\ mkdir stages\%stage%\
+if not exist stages\!stage!\ mkdir stages\!stage!\
 
-start /wait /min "" cmd /c %stage%.bat %*
+start /wait /min "" cmd /c !stage!.bat %*
 set el=%errorlevel%
-if "z%el%"=="z1" exit /b %el%
+if not "z%el%"=="z0" exit /b %el%
 
-if not "z%nextStage%"=="znone" move stages\%stage%\%id% stages\%nextStage%\%id%
+if not "z!nextStage!"=="znone" move stages\!stage!\!id! stages\!nextStage!\!id!
 
 exit /b
 
@@ -52,6 +54,6 @@ set stage=%~1
 set nextStage=%~2
 
 @REM todo: change stage to error and output error message in error output
-msg "%username%" There has been an error in the worker batch script. Stage: "%stage%", nextStage: "%nextStage%".
-echo There has been an error in the worker batch script. Stage: "%stage%", nextStage: "%nextStage%".
+msg "%username%" There has been an error in the worker batch script. Stage: "!stage!", nextStage: "!nextStage!".
+echo There has been an error in the worker batch script. Stage: "!stage!", nextStage: "!nextStage!".
 exit /b
