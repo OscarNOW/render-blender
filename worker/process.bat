@@ -38,7 +38,11 @@ set nextStage=%~2
 if not exist stages\%stage%\%id% exit /b
 
 if not exist stages\%stage%\ mkdir stages\%stage%\
+
 start /wait /min "" cmd /c %stage%.bat %*
+set el=%errorlevel%
+if "z%el%"=="z1" exit /b %el%
+
 if not "z%nextStage%"=="znone" move stages\%stage%\%id% stages\%nextStage%\%id%
 
 exit /b
