@@ -2,7 +2,7 @@ import '/track/handler.js';
 import { getInfo } from '/js/getInfo.js';
 
 const { code, id } = getInfo();
-document.title = `Starting | ID ${id}`;
+document.title = `notStarted | ID ${id}`;
 
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', async () => {
