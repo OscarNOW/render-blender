@@ -1,3 +1,5 @@
+//todo: split into create and start
+
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -7,10 +9,9 @@ const { basePath, blenderPath } = require('../settings.json');
 
 module.exports = {
     execute({ end, params, statusCode }) {
-        if (params.code !== code) return statusCode(403, 'wrongCode', 'Wrong code');
-
-        if (!fs.existsSync('/user/')) fs.mkdirSync('/user/');
-        if (!fs.existsSync('/user/files/')) fs.mkdirSync('user/files/');
+        if (params.code !== code) return statusCode(403, 'wrongCode', 'The code provided is not the correct one');
+        if (!params.filePath) return statusCode(403, 'invalidFilePath', 'Invalid file path');
+        if (params.filePath.length === 0) return statusCode(403, 'invalidFilePath', 'Invalid file path');
 
         const filePath = path.join(basePath, params.filePath);
 
