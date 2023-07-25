@@ -51,6 +51,7 @@ if "z!stage!"=="zerror" (
     msg "%username%" There has been an error in the error handling of the worker batch script
     echo There has been an error in the error handling of the worker batch script
 ) else (
+    move stages\!stage!\!id! stages\error\!id!
     call :stage error none
 )
 exit /b
