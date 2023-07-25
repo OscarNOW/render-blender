@@ -5,3 +5,8 @@ td {
     border-collapse: collapse;
     padding: 1vmax;
 }
+
+td.action>* {
+    margin-left: 0.25vw;
+    margin-right: 0.25vw;
+}

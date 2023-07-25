@@ -31,16 +31,20 @@ async function renderId(id) {
     const tr = document.createElement('tr');
 
     const idTd = document.createElement('td');
+    idTd.classList.add('id');
     idTd.innerText = id;
     tr.appendChild(idTd);
 
     const stageTd = document.createElement('td');
+    stageTd.classList.add('stage');
     stageTd.innerText = '____';
     tr.appendChild(stageTd);
 
     const actionTd = document.createElement('td');
+    actionTd.classList.add('action');
 
     const trackButton = document.createElement('button');
+    trackButton.classList.add('track');
     trackButton.innerText = 'track';
     trackButton.addEventListener('click', () => {
         window.location.href = `/track?id=${id}`;
@@ -48,6 +52,7 @@ async function renderId(id) {
     actionTd.appendChild(trackButton);
 
     const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete');
     deleteButton.innerText = 'delete';
     deleteButton.addEventListener('click', async () => {
         deleteButton.disabled = true;
