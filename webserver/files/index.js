@@ -73,12 +73,20 @@ async function renderId(id) {
 
     tr.appendChild(actionTd);
 
-    //todo: add project path
+    const pathTd = document.createElement('td');
+    pathTd.classList.add('path');
+    pathTd.innerText = '____';
+    tr.appendChild(pathTd);
 
     table.appendChild(tr);
 
-    await updateStage(id, stageTd);
+    await Promise.all([updateStage(id, stageTd), updatePath(id, pathTd)]);
     setInterval(() => updateStage(id, stageTd), 2000);
+}
+
+async function updatePath(id, pathTd) {
+    const path = await fetch(`/api/getPath?code=${code}&id=${id}`).then((resp) => resp.text());
+    pathTd.innerText = path;
 }
 
 async function updateStage(id, stageTd) {
