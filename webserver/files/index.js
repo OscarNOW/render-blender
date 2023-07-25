@@ -75,7 +75,7 @@ async function renderId(id) {
 
     const pathTd = document.createElement('td');
     pathTd.classList.add('path');
-    pathTd.innerText = '____';
+    pathTd.innerText = '________________________________________';
     tr.appendChild(pathTd);
 
     table.appendChild(tr);
