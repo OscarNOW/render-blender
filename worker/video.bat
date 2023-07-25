@@ -35,7 +35,8 @@ cd ..
 cd ..
 
 if not exist ffmpeg\bin\ (
-    msg "%username%" ffmpeg\bin\ doesn't exist in %cd%
+    @REM todo: test this
+    echo|set /p=ffmpeg\bin\ doesn't exist in %cd%>output\error\%1.txt
     echo ffmpeg\bin\ doesn't exist in %cd%
     exit /b 1
 )
