@@ -19,8 +19,8 @@ cd ..
 cd ..
 
 if not exist temp\ mkdir temp\
-if exist temp\temp.py del temp\temp.py
-if exist temp\temp2.py del temp\temp2.py
+if exist temp\temp.%1.py del temp\temp.%1.py
+if exist temp\temp2.%1.py del temp\temp2.%1.py
 
 copy analyse.py temp\temp.py
 
@@ -29,3 +29,6 @@ powershell -Command "(gc temp.py) -replace '_outputPath_', '%escapedOutputPath%'
 cd ..
 
 %3 -b %2 --python "%cd%\temp\temp2.py" --enable-autoexec
+
+del temp\temp.%1.py
+del temp\temp2.%1.py
