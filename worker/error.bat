@@ -14,4 +14,4 @@ echo Error:
 echo !errorMessage!
 
 if not exist output\error\ mkdir output\error\
-echo !errorMessage!>output\error\%1.txt
+echo|set /p="!errorMessage!">output\error\%1.txt
