@@ -53,6 +53,7 @@ set nextStage=%~2
 if "z!stage!"=="zerror" (
     msg "%username%" There has been an error in the error handling of the worker batch script
     echo There has been an error in the error handling of the worker batch script
+    exit
 ) else (
     if not exist temp\error.!id!.txt (
         echo|set /p="There has been an unknown error in the stage '!stage!' with nextStage '!nextStage!'">temp\error.!id!.txt
