@@ -67,7 +67,7 @@ function calculateTimeLeft(frameAmount) {
     const timerPerFrame = timePassed / framesPassed;
 
     const framesLeft = lastFrameNumber - lastRenderFrameAmount;
-    const timeLeft = Math.min(0,                            // prevent timeLeft being less than 0
+    const timeLeft = Math.max(0,                            // prevent timeLeft being less than 0
         (framesLeft * timerPerFrame) -
         Math.min(
             (performance.now() - lastFrameRenderTime),      //  we subtract the time that has passed since the last frame was rendered
