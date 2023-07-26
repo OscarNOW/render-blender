@@ -24,24 +24,35 @@ async function reload() {
     renderTimeLeft(timeLeft);
 }
 
-let firstFrameLoadTime = null;
+let firstFrameRenderTime = null;
 let firstLoadFrameAmount = null;
-function calculateTimeLeft(frameNumber) {
-    if (isNaN(frameNumber) || frameNumber === 0 || !frameNumber) return null;
 
-    if (firstFrameLoadTime === null) {
-        firstFrameLoadTime = performance.now();
-        firstLoadFrameAmount = frameNumber;
+let lastFrameRenderTime = null;
+let lastRenderFrameAmount = null;
 
-        return null; //can't calculate time, because don't know how long rendering a frame takes
+function calculateTimeLeft(frameAmount) {
+    if (isNaN(frameAmount) || frameAmount === 0 || !frameAmount) return null;
+
+    if (firstFrameRenderTime === null) {
+        firstFrameRenderTime = performance.now();
+        firstLoadFrameAmount = frameAmount;
     };
 
-    const timePassed = performance.now() - firstFrameLoadTime;
-    const framesPassed = frameNumber - firstLoadFrameAmount;
+    if (lastRenderFrameAmount !== frameAmount) {
+        lastRenderFrameAmount = frameAmount;
+        lastFrameRenderTime = performance.now();
+    };
+
+    if (lastRenderFrameAmount - firstLoadFrameAmount < 1)
+        return null; //can't calculate time, because don't know how long rendering a frame takes, because no frames have rendered while loaded
+
+    const timePassed = lastFrameRenderTime - firstFrameRenderTime;
+    const framesPassed = lastRenderFrameAmount - firstLoadFrameAmount;
 
     const timerPerFrame = timePassed / framesPassed;
+    console.log('timePerFrame', timerPerFrame);
 
-    const framesLeft = lastFrameNumber - frameNumber;
+    const framesLeft = lastFrameNumber - lastRenderFrameAmount;
     const timeLeft = framesLeft * timerPerFrame;
 
     return timeLeft;
@@ -49,6 +60,7 @@ function calculateTimeLeft(frameNumber) {
 
 function renderTimeLeft(timeLeft) {
     if (timeLeft === null) return;
+    console.log('timeLeft', timeLeft);
 
     const minutesLeft = timeLeft / 1000 / 60;
     const secondsLeft = timeLeft / 1000 % 60;
