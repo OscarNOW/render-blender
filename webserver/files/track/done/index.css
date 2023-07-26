@@ -1,4 +1,5 @@
 #video {
     display: block;
-    max-width: 90dvw;
+    max-width: 90vw;
+    max-height: 90vh;
 }
