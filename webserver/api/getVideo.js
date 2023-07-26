@@ -11,7 +11,7 @@ module.exports = {
         if ((!id) && id !== 0) return statusCode(403, 'invalidId', 'Invalid id');
 
         const baseFilePath = path.join(__dirname, '../../worker/output/video/');
-        const filePath = path.join(baseFilePath, `/${id}.mp4`); //todo: test if the / before ${id} is needed
+        const filePath = path.join(baseFilePath, `${id}.mp4`);
 
         if (!filePath.startsWith(baseFilePath)) return statusCode(403, 'invalidId', 'Invalid id');
         if (!fs.existsSync(filePath)) return statusCode(403, 'invalidId', 'Invalid id');
