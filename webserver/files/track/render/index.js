@@ -25,31 +25,32 @@ async function reload() {
 }
 
 let frameAmountWhenLoaded = null;
+
 let firstFrameRenderTime = null;
-let firstLoadFrameAmount = null;
+let firstFrameRenderFrameAmount = null;
 
 let lastFrameRenderTime = null;
 let lastRenderFrameAmount = null;
 
 function calculateTimeLeft(frameAmount) {
-    if (isNaN(frameAmount) || frameAmount === 0 || !frameAmount) return null;
+    if (isNaN(frameAmount) || (frameAmount !== 0 && !frameAmount)) return null;
 
     if (frameAmountWhenLoaded === null)
         frameAmountWhenLoaded = frameAmount;
 
-    if (firstFrameRenderTime === null) {
-        firstFrameRenderTime = performance.now();
-        firstLoadFrameAmount = frameAmount;
-    };
-
     let activeFirstFrameRenderTime;
-    let activeFirstLoadFrameAmount;
+    let activeFirstFrameRenderFrameAmount;
     if (frameAmountWhenLoaded === frameAmount) {
         activeFirstFrameRenderTime = performance.now();
-        activeFirstLoadFrameAmount = frameAmount;
+        activeFirstFrameRenderFrameAmount = frameAmount;
     } else {
+        if (firstFrameRenderTime === null) {
+            firstFrameRenderTime = performance.now();
+            firstFrameRenderFrameAmount = frameAmount;
+        };
+
         activeFirstFrameRenderTime = firstFrameRenderTime;
-        activeFirstLoadFrameAmount = firstLoadFrameAmount;
+        activeFirstFrameRenderFrameAmount = firstFrameRenderFrameAmount;
     }
 
     if (lastRenderFrameAmount !== frameAmount) {
@@ -57,11 +58,11 @@ function calculateTimeLeft(frameAmount) {
         lastFrameRenderTime = performance.now();
     };
 
-    if (lastRenderFrameAmount - activeFirstLoadFrameAmount < 1)
+    if (lastRenderFrameAmount - activeFirstFrameRenderFrameAmount < 1)
         return null; //can't calculate time, because don't know how long rendering a frame takes, because no frames have rendered while loaded
 
     const timePassed = lastFrameRenderTime - activeFirstFrameRenderTime;
-    const framesPassed = lastRenderFrameAmount - activeFirstLoadFrameAmount;
+    const framesPassed = lastRenderFrameAmount - activeFirstFrameRenderFrameAmount;
 
     const timerPerFrame = timePassed / framesPassed;
 
