@@ -106,7 +106,7 @@ function renderFrameNumber(orgFrameNumber) {
 
     frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
     document.title = [`${frameNumber}/${lastFrameNumber}`, ...document.title.split(' | ').slice(1)].join(' | ');
-    progressElement.style.setProperty('--progress', `${(((orgFrameNumber ?? 0) + 1) / lastFrameNumber) * 100}%`);
+    progressElement.style.setProperty('--progress', `${((orgFrameNumber ?? 0) / (lastFrameNumber - 1)) * 100}%`);
 }
 
 let lastRenderedFrameNumber;
