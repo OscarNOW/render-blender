@@ -11,12 +11,41 @@ let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
 const progressElement = document.getElementById('progress');
 
+const timeLeftElement = document.getElementById('timeLeft');
+
 onReload(reload);
 
 async function reload() {
     const frameNumber = await getLastRenderedFrameNumber();
     await reloadFrame(frameNumber);
     renderFrameNumber(frameNumber);
+
+    const timeLeft = calculateTimeLeft(frameNumber);
+    renderTimeLeft(timeLeft);
+}
+
+let firstFrameLoadTime = null;
+let firstLoadFrameAmount = null;
+function calculateTimeLeft(frameNumber) {
+    if (firstFrameLoadTime === null) {
+        firstFrameLoadTime = performance.now();
+        firstLoadFrameAmount = frameNumber;
+    };
+
+    //todo-imp: this is not correct
+    const timePassed = performance.now() - firstFrameLoadTime;
+    const framesPassed = frameNumber - firstLoadFrameAmount;
+
+    const timerPerFrame = timePassed / framesPassed;
+
+    const framesLeft = lastFrameNumber - frameNumber;
+    const timeLeft = framesLeft * timerPerFrame;
+
+    return timeLeft;
+}
+
+function renderTimeLeft(timeLeft) {
+    timeLeftElement.innerText = `${timeLeft} minutes`;
 }
 
 async function getLastFrameNumber() {
