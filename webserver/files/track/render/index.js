@@ -81,11 +81,11 @@ function calculateTimeLeft(frameAmount) {
 function renderTimeLeft(timeLeft) {
     if (timeLeft === null) return;
 
-    const minutesLeft = timeLeft / 1000 / 60;
-    const secondsLeft = timeLeft / 1000 % 60;
+    const minutesLeft = Math.floor(timeLeft / 1000 / 60);
+    const secondsLeft = Math.round(timeLeft / 1000 % 60);
 
-    timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes and ${Math.round(secondsLeft)} seconds`;
-    document.title = [...document.title.split(' | ').slice(0, 1), `${Math.round(minutesLeft)}m${Math.round(secondsLeft)}s`, ...document.title.split(' | ').slice(2)].join(' | ');
+    timeLeftElement.innerText = `${minutesLeft} minutes and ${secondsLeft} seconds`;
+    document.title = [...document.title.split(' | ').slice(0, 1), `${minutesLeft}m${secondsLeft}s`, ...document.title.split(' | ').slice(2)].join(' | ');
 }
 
 async function getLastFrameNumber() {
