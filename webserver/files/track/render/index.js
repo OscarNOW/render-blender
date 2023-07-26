@@ -27,6 +27,8 @@ async function reload() {
 let firstFrameLoadTime = null;
 let firstLoadFrameAmount = null;
 function calculateTimeLeft(frameNumber) {
+    if (isNaN(frameNumber) || frameNumber === 0 || !frameNumber) return;
+
     if (firstFrameLoadTime === null) {
         firstFrameLoadTime = performance.now();
         firstLoadFrameAmount = frameNumber;
