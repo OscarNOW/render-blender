@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame #/#### | Render | ID ####</title>
+    <title>#/#### | ##m##s | Render | ####</title>
 
     <script type="module" src="/track/render/index.js"></script>
 
@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    <p id="frameNumber">#/####</p>
+    <p>Frame <span id="frameNumber">#/####</span></p>
+    <p>Approximately <span id="timeLeft">## minutes and ## seconds</span> left</p>
     <div class="progressBar">
         <div id="progress" style="--progress: 0%"></div>
     </div>

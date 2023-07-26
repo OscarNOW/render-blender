@@ -2,14 +2,16 @@ import { onReload } from '/track/handler.js';
 import { getInfo } from '/js/getInfo.js';
 
 const { code, id } = getInfo();
-document.title = `Frame #/#### | Render | ID ${id}`;
+document.title = `#/#### | ##m##s | Render | ${id}`;
 
 const lastFrameNumber = await getLastFrameNumber();
-document.title = `Frame #/${lastFrameNumber} | Render | ID ${id}`;
+document.title = `#/${lastFrameNumber} | ##m##s | Render | ${id}`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
 const progressElement = document.getElementById('progress');
+
+const timeLeftElement = document.getElementById('timeLeft');
 
 onReload(reload);
 
@@ -17,6 +19,66 @@ async function reload() {
     const frameNumber = await getLastRenderedFrameNumber();
     await reloadFrame(frameNumber);
     renderFrameNumber(frameNumber);
+
+    const timeLeft = calculateTimeLeft(frameNumber + 1); //actual frameNumber is 1 higher than returned from getLastRenderFrameNumber
+    renderTimeLeft(timeLeft);
+}
+
+let frameAmountWhenLoaded = null;
+let firstFrameRenderTime = null;
+let firstLoadFrameAmount = null;
+
+let lastFrameRenderTime = null;
+let lastRenderFrameAmount = null;
+
+function calculateTimeLeft(frameAmount) {
+    if (isNaN(frameAmount) || frameAmount === 0 || !frameAmount) return null;
+
+    if (frameAmountWhenLoaded === null)
+        frameAmountWhenLoaded = frameAmount;
+
+    if (firstFrameRenderTime === null) {
+        firstFrameRenderTime = performance.now();
+        firstLoadFrameAmount = frameAmount;
+    };
+
+    let activeFirstFrameRenderTime;
+    let activeFirstLoadFrameAmount;
+    if (frameAmountWhenLoaded === frameAmount) {
+        activeFirstFrameRenderTime = performance.now();
+        activeFirstLoadFrameAmount = frameAmount;
+    } else {
+        activeFirstFrameRenderTime = firstFrameRenderTime;
+        activeFirstLoadFrameAmount = firstLoadFrameAmount;
+    }
+
+    if (lastRenderFrameAmount !== frameAmount) {
+        lastRenderFrameAmount = frameAmount;
+        lastFrameRenderTime = performance.now();
+    };
+
+    if (lastRenderFrameAmount - activeFirstLoadFrameAmount < 1)
+        return null; //can't calculate time, because don't know how long rendering a frame takes, because no frames have rendered while loaded
+
+    const timePassed = lastFrameRenderTime - activeFirstFrameRenderTime;
+    const framesPassed = lastRenderFrameAmount - activeFirstLoadFrameAmount;
+
+    const timerPerFrame = timePassed / framesPassed;
+
+    const framesLeft = lastFrameNumber - lastRenderFrameAmount;
+    const timeLeft = (framesLeft * timerPerFrame) - (performance.now() - lastFrameRenderTime); //we subtract the time that has passed since the last frame was rendered
+
+    return timeLeft;
+}
+
+function renderTimeLeft(timeLeft) {
+    if (timeLeft === null) return;
+
+    const minutesLeft = timeLeft / 1000 / 60;
+    const secondsLeft = ((timeLeft / 1000 + 1) % 60) - 1;
+
+    timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes and ${Math.round(secondsLeft)} seconds`;
+    document.title = [...document.title.split(' | ').slice(0, 1), `${Math.round(minutesLeft)}m${Math.round(secondsLeft)}s`, ...document.title.split(' | ').slice(2)].join(' | ');
 }
 
 async function getLastFrameNumber() {
@@ -40,7 +102,7 @@ function renderFrameNumber(orgFrameNumber) {
     const frameNumber = orgFrameNumber ?? '#';
 
     frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
-    document.title = `Frame ${frameNumber}/${lastFrameNumber} | Render | ID ${id}`;
+    document.title = [`${frameNumber}/${lastFrameNumber}`, ...document.title.split(' | ').slice(1)].join(' | ');
     progressElement.style.setProperty('--progress', `${((orgFrameNumber ?? 0) / lastFrameNumber) * 100}%`);
 }
 
