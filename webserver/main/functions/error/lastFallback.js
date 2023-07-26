@@ -58,7 +58,10 @@ module.exports = {
 
         const data = `${`${err}`.split('\n')[0]}\n\n\nStack${err?.stack ? '' : ' (No stack given)'}:\n${stack}`
 
-        fs.writeFileSync(`${settings.generic.path.files.errors}RAW1-${amountError}-${Math.floor(Math.random() * 1000)}.txt`, data);
+        let errorPath = settings.generic.path.files.errors;
+        if (!fs.existsSync(errorPath)) errorPath = './';
+
+        fs.writeFileSync(`${errorPath}RAW1-${amountError}-${Math.floor(Math.random() * 1000)}.txt`, data);
 
         if (amountError > 5 && timeDiff < 1000) retry = false;
         cConsole.clear();
