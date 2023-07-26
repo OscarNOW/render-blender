@@ -18,7 +18,7 @@ cd temp
 powershell -Command "(gc temp.%1.py) -replace '_outputFilePath_', '%escapedOutputFilePath%' | Out-File -encoding ASCII temp2.%1.py"
 cd ..
 
-%3 -b %2 --python "%cd%\temp\temp2.%1.py" --enable-autoexec
+start /wait /min /high "" %3 -b %2 --python "%cd%\temp\temp2.%1.py" --enable-autoexec
 
 del temp\temp.%1.py
 del temp\temp2.%1.py
