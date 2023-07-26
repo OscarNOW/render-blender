@@ -11,4 +11,4 @@ if not exist output\render\%1\ (
     mkdir output\render\%1\
 )
 
-start /wait /min /high "" %3 -b %2 -F PNG -o "%cd%\output\render\%1\####.png" -a
+start /wait /min /high "%1" %3 -b %2 -F PNG -o "%cd%\output\render\%1\####.png" -a

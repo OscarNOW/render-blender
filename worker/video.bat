@@ -42,7 +42,7 @@ if not exist ffmpeg\bin\ (
 cd ffmpeg
 cd bin
 
-start /wait /min /high "" ffmpeg -framerate %fps% -f image2 -i "%filePath%%%04d.png" -i "%audioPath%" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
+start /wait /min /high "%1" ffmpeg -framerate %fps% -f image2 -i "%filePath%%%04d.png" -i "%audioPath%" -vcodec libx264 -crf 25 -pix_fmt yuv420p -vframes %frameAmount% %1.mp4
 
 move %1.mp4 ..\..\output\video\%1.mp4
 

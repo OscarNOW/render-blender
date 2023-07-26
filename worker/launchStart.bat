@@ -1,3 +1,6 @@
 @echo off
-start /min /abovenormal "" cmd /c start.bat %*
+set id=%1
+
+start /min /abovenormal "%id%" cmd /c start.bat %*
+
 exit
