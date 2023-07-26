@@ -25,9 +25,9 @@ module.exports = {
 function stop(id) {
     const process = spawn(`"${path.join(__dirname, '../../worker/stop.bat')}"`, [id], { shell: true, cwd: path.join(__dirname, '../../worker/') });
 
-    process.stdout.on('data', (data) => {
-        console.log(data.toString());
-    });
+    // process.stdout.on('data', (data) => {
+    //     console.log(data.toString());
+    // });
 
     process.stderr.on('data', (data) => {
         console.warn(data.toString());
