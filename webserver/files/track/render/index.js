@@ -32,7 +32,6 @@ function calculateTimeLeft(frameNumber) {
         firstLoadFrameAmount = frameNumber;
     };
 
-    //todo-imp: this is not correct
     const timePassed = performance.now() - firstFrameLoadTime;
     const framesPassed = frameNumber - firstLoadFrameAmount;
 
