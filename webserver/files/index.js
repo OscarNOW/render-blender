@@ -1,8 +1,9 @@
 import { getInfo } from '/js/getInfo.js';
 const { code } = getInfo({ skipId: true });
 
-const startAllButton = document.getElementById('startAllButton');
 const deleteAllButton = document.getElementById('deleteAllButton');
+const stopAllButton = document.getElementById('stopAllButton');
+const startAllButton = document.getElementById('startAllButton');
 const path = document.getElementById('path');
 const form = document.getElementById('form');
 const table = document.getElementById('table');
@@ -22,8 +23,9 @@ reloadIds();
 async function reloadIds() {
     const ids = await fetch(`/api/getAllProjects?code=${code}`).then((resp) => resp.json());
 
-    updateStartAllButton(ids);
     updateDeleteAllButton(ids);
+    updateStopAllButton(ids);
+    updateStartAllButton(ids);
 
     while ([...table.children].length > 1)
         table.lastChild.remove();
@@ -55,6 +57,31 @@ function updateStartAllButton(ids) {
 
     startAllButton.disabled = false;
     startAllButton.style.cursor = null;
+}
+
+let stopAllButtonClickListener = null;
+function updateStopAllButton(ids) {
+    stopAllButton.disabled = true;
+    stopAllButton.style.cursor = 'wait';
+
+    if (stopAllButtonClickListener)
+        stopAllButton.removeEventListener('click', stopAllButtonClickListener);
+
+    stopAllButtonClickListener = async () => {
+        stopAllButton.disabled = true;
+        stopAllButton.style.cursor = 'wait';
+
+        for (const id of ids)
+            await fetch(`/api/start?code=${code}&id=${id}`);
+
+        stopAllButton.disabled = false;
+        stopAllButton.style.cursor = null;
+    };
+
+    stopAllButton.addEventListener('click', stopAllButtonClickListener);
+
+    stopAllButton.disabled = false;
+    stopAllButton.style.cursor = null;
 }
 
 let deleteAllButtonClickListener = null;
