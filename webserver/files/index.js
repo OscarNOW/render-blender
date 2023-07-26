@@ -133,7 +133,19 @@ async function renderId(id) {
     });
     actionTd.appendChild(startButton);
 
-    //todo: add stop button
+    const stopButton = document.createElement('button');
+    stopButton.classList.add('stop');
+    stopButton.innerText = 'stop';
+    stopButton.addEventListener('click', async () => {
+        stopButton.disabled = true;
+        stopButton.style.cursor = 'wait';
+
+        await fetch(`/api/stop?code=${code}&id=${id}`);
+
+        stopButton.disabled = false;
+        stopButton.style.cursor = null;
+    });
+    actionTd.appendChild(stopButton);
 
     tr.appendChild(actionTd);
 
