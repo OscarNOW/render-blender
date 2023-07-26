@@ -34,26 +34,34 @@ let lastRenderFrameAmount = null;
 function calculateTimeLeft(frameAmount) {
     if (isNaN(frameAmount) || frameAmount === 0 || !frameAmount) return null;
 
-    if (frameAmountWhenLoaded === null) { //todo-imp: test if this works
+    if (frameAmountWhenLoaded === null)
         frameAmountWhenLoaded = frameAmount;
-        return null; // wait for a frame to render so whe now the exact time when it rendered
-    }
 
     if (firstFrameRenderTime === null) {
         firstFrameRenderTime = performance.now();
         firstLoadFrameAmount = frameAmount;
     };
 
+    let activeFirstFrameRenderTime;
+    let activeFirstLoadFrameAmount;
+    if (frameAmountWhenLoaded === frameAmount) {
+        activeFirstFrameRenderTime = performance.now();
+        activeFirstLoadFrameAmount = frameAmount;
+    } else {
+        activeFirstFrameRenderTime = firstFrameRenderTime;
+        activeFirstLoadFrameAmount = firstLoadFrameAmount;
+    }
+
     if (lastRenderFrameAmount !== frameAmount) {
         lastRenderFrameAmount = frameAmount;
         lastFrameRenderTime = performance.now();
     };
 
-    if (lastRenderFrameAmount - firstLoadFrameAmount < 1)
+    if (lastRenderFrameAmount - activeFirstLoadFrameAmount < 1)
         return null; //can't calculate time, because don't know how long rendering a frame takes, because no frames have rendered while loaded
 
-    const timePassed = lastFrameRenderTime - firstFrameRenderTime;
-    const framesPassed = lastRenderFrameAmount - firstLoadFrameAmount;
+    const timePassed = lastFrameRenderTime - activeFirstFrameRenderTime;
+    const framesPassed = lastRenderFrameAmount - activeFirstLoadFrameAmount;
 
     const timerPerFrame = timePassed / framesPassed;
 
