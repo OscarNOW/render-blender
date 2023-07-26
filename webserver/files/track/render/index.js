@@ -2,10 +2,10 @@ import { onReload } from '/track/handler.js';
 import { getInfo } from '/js/getInfo.js';
 
 const { code, id } = getInfo();
-document.title = `Frame #/#### | Render | ID ${id}`;
+document.title = `#/#### | ##m | Render | ID ${id}`;
 
 const lastFrameNumber = await getLastFrameNumber();
-document.title = `Frame #/${lastFrameNumber} | Render | ID ${id}`;
+document.title = `#/${lastFrameNumber} | ##m | Render | ID ${id}`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
@@ -70,6 +70,7 @@ function renderTimeLeft(timeLeft) {
     const secondsLeft = ((timeLeft / 1000 + 1) % 60) - 1;
 
     timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes and ${Math.round(secondsLeft)} seconds`;
+    document.title = [...document.title.split(' | ').slice(0, 1), `${Math.round(minutesLeft)}m`, ...document.title.split(' | ').slice(2)].join(' | ');
 }
 
 async function getLastFrameNumber() {
@@ -93,7 +94,7 @@ function renderFrameNumber(orgFrameNumber) {
     const frameNumber = orgFrameNumber ?? '#';
 
     frameNumberElement.innerText = `${frameNumber}/${lastFrameNumber}`;
-    document.title = `Frame ${frameNumber}/${lastFrameNumber} | Render | ID ${id}`;
+    document.title = [`${frameNumber}/${lastFrameNumber}`, ...document.title.split(' | ').slice(1)].join(' | ');
     progressElement.style.setProperty('--progress', `${((orgFrameNumber ?? 0) / lastFrameNumber) * 100}%`);
 }
 
