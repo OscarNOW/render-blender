@@ -72,7 +72,7 @@ function updateStopAllButton(ids) {
         stopAllButton.style.cursor = 'wait';
 
         for (const id of ids)
-            await fetch(`/api/start?code=${code}&id=${id}`);
+            await fetch(`/api/stop?code=${code}&id=${id}`);
 
         stopAllButton.disabled = false;
         stopAllButton.style.cursor = null;
