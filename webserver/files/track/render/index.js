@@ -20,7 +20,7 @@ async function reload() {
     await reloadFrame(frameNumber);
     renderFrameNumber(frameNumber);
 
-    const timeLeft = calculateTimeLeft(frameNumber);
+    const timeLeft = calculateTimeLeft(frameNumber + 1); //actual frameNumber is 1 higher than returned from getLastRenderFrameNumber
     renderTimeLeft(timeLeft);
 }
 
