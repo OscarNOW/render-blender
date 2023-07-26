@@ -75,7 +75,7 @@ function renderTimeLeft(timeLeft) {
     if (timeLeft === null) return;
 
     const minutesLeft = timeLeft / 1000 / 60;
-    const secondsLeft = ((timeLeft / 1000 + 1) % 60) - 1;
+    const secondsLeft = (timeLeft / 1000 % 60) - 1;
 
     timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes and ${Math.round(secondsLeft)} seconds`;
     document.title = [...document.title.split(' | ').slice(0, 1), `${Math.round(minutesLeft)}m${Math.round(secondsLeft)}s`, ...document.title.split(' | ').slice(2)].join(' | ');
