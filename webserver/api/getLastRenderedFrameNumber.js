@@ -11,7 +11,7 @@ module.exports = {
         if ((!id) && id !== 0) return statusCode(403, 'invalidId', 'Invalid id');
 
         const baseFilePath = path.join(__dirname, '../../worker/output/render/');
-        const folderPath = path.join(baseFilePath, `/${id}/`); //todo: test if the / before ${id} is needed
+        const folderPath = path.join(baseFilePath, `${id}/`);
 
         if (!folderPath.startsWith(baseFilePath)) return statusCode(403, 'invalidId', 'Invalid id');
         if (!fs.existsSync(folderPath)) return statusCode(403, 'invalidId', 'Invalid id');
