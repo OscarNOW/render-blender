@@ -24,6 +24,7 @@ async function reload() {
     renderTimeLeft(timeLeft);
 }
 
+let frameAmountWhenLoaded = null;
 let firstFrameRenderTime = null;
 let firstLoadFrameAmount = null;
 
@@ -32,6 +33,11 @@ let lastRenderFrameAmount = null;
 
 function calculateTimeLeft(frameAmount) {
     if (isNaN(frameAmount) || frameAmount === 0 || !frameAmount) return null;
+
+    if (frameAmountWhenLoaded === null) { //todo-imp: test if this works
+        frameAmountWhenLoaded = frameAmount;
+        return null; // wait for a frame to render so whe now the exact time when it rendered
+    }
 
     if (firstFrameRenderTime === null) {
         firstFrameRenderTime = performance.now();
