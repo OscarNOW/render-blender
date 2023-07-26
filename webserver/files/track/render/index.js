@@ -51,7 +51,9 @@ function renderTimeLeft(timeLeft) {
     if (timeLeft === null) return;
 
     const minutesLeft = timeLeft / 1000 / 60;
-    timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes`;
+    const secondsLeft = timeLeft / 1000 % 60;
+
+    timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes and ${Math.round(secondsLeft)} seconds`;
 }
 
 async function getLastFrameNumber() {
