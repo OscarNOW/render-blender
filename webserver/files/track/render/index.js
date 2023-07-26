@@ -27,11 +27,13 @@ async function reload() {
 let firstFrameLoadTime = null;
 let firstLoadFrameAmount = null;
 function calculateTimeLeft(frameNumber) {
-    if (isNaN(frameNumber) || frameNumber === 0 || !frameNumber) return;
+    if (isNaN(frameNumber) || frameNumber === 0 || !frameNumber) return null;
 
     if (firstFrameLoadTime === null) {
         firstFrameLoadTime = performance.now();
         firstLoadFrameAmount = frameNumber;
+
+        return null; //can't calculate time, because don't know how long rendering a frame takes
     };
 
     const timePassed = performance.now() - firstFrameLoadTime;
@@ -46,6 +48,8 @@ function calculateTimeLeft(frameNumber) {
 }
 
 function renderTimeLeft(timeLeft) {
+    if (timeLeft === null) return;
+
     const minutesLeft = timeLeft / 1000 / 60;
     timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes`;
 }
