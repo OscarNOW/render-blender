@@ -26,7 +26,11 @@ async function reloadLoop() {
 
 async function reload() {
     const newStage = await getStage({ code, id });
-    if (newStage !== currentStage) return window.location.replace(`/track/${newStage}?id=${id}`);
+    if (newStage !== currentStage)
+        if (newStage === 'null')
+            return window.location.replace('/');
+        else
+            return window.location.replace(`/track/${newStage}?id=${id}`);
 
     for (const callback of reloadCallbacks)
         await callback();
