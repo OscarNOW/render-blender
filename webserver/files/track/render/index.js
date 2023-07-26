@@ -45,7 +45,8 @@ function calculateTimeLeft(frameNumber) {
 }
 
 function renderTimeLeft(timeLeft) {
-    timeLeftElement.innerText = `${timeLeft} minutes`;
+    const minutesLeft = timeLeft / 1000 / 60;
+    timeLeftElement.innerText = `${Math.round(minutesLeft)} minutes`;
 }
 
 async function getLastFrameNumber() {
