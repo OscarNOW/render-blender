@@ -2,10 +2,10 @@ import { onReload } from '/track/handler.js';
 import { getInfo } from '/js/getInfo.js';
 
 const { code, id } = getInfo();
-document.title = `#/#### | ##m##s | Render | ${id}`;
+document.title = `#/#### | ##m##s | Ren | ${id}`;
 
 const lastFrameNumber = await getLastFrameNumber();
-document.title = `#/${lastFrameNumber} | ##m##s | Render | ${id}`;
+document.title = `#/${lastFrameNumber} | ##m##s | Ren | ${id}`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
