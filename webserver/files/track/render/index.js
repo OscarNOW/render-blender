@@ -113,6 +113,7 @@ function renderFrameNumber(orgFrameNumber) {
     progressElement.style.setProperty('--progress', `${((orgFrameNumber ?? 0) / (lastFrameNumber - 1)) * 100}%`);
 }
 
+let imageUrl = null;
 let lastRenderedFrameNumber;
 async function reloadFrame(frameNumber) {
     if (frameNumber === lastRenderedFrameNumber) return;
@@ -122,15 +123,17 @@ async function reloadFrame(frameNumber) {
 
     const resp = await fetch(`/api/getLastRenderedFrame?code=${code}&id=${id}`);
     const image = await resp.blob();
-    const imageUrl = URL.createObjectURL(image);
+    const newImageUrl = URL.createObjectURL(image);
 
-    const newFrameElement = await createImageElement(imageUrl);
+    const newFrameElement = await createImageElement(newImageUrl);
     newFrameElement.id = 'frame';
 
     frameElement.remove();
     newFrameElement.style.display = null;
 
     frameElement = newFrameElement;
+    if (imageUrl !== null) URL.revokeObjectURL(imageUrl);
+    imageUrl = newImageUrl;
 }
 
 function createImageElement(src) {
