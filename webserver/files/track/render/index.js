@@ -2,10 +2,10 @@ import { onReload } from '/track/handler.js';
 import { getInfo } from '/js/getInfo.js';
 
 const { code, id } = getInfo();
-document.title = `#/#### | ##m##s | Render | ${id}`;
+document.title = `#/#### | ##m##s | Ren | ${id}`;
 
 const lastFrameNumber = await getLastFrameNumber();
-document.title = `#/${lastFrameNumber} | ##m##s | Render | ${id}`;
+document.title = `#/${lastFrameNumber} | ##m##s | Ren | ${id}`;
 
 let frameElement = document.getElementById('frame');
 const frameNumberElement = document.getElementById('frameNumber');
@@ -82,7 +82,7 @@ function renderTimeLeft(timeLeft) {
     if (timeLeft === null) return;
 
     const minutesLeft = Math.floor(timeLeft / 1000 / 60);
-    const secondsLeft = Math.round(timeLeft / 1000 % 60);
+    const secondsLeft = Math.floor(timeLeft / 1000 % 60);
 
     timeLeftElement.innerText = `${minutesLeft} minutes and ${secondsLeft} seconds`;
     document.title = [...document.title.split(' | ').slice(0, 1), `${minutesLeft}m${secondsLeft}s`, ...document.title.split(' | ').slice(2)].join(' | ');
