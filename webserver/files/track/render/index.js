@@ -132,7 +132,7 @@ async function reloadFrame(frameNumber) {
     newFrameElement.style.display = null;
 
     frameElement = newFrameElement;
-    if (imageUrl !== null) URL.revokeObjectURL(imageUrl);
+    if (imageUrl !== null) URL.revokeObjectURL(imageUrl); //todo: doesn't seem to work
     imageUrl = newImageUrl;
 }
 
